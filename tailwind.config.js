@@ -12,10 +12,11 @@ module.exports = {
       },
       colors: {
         primary: "#297bff", // Добавляем кастомный цвет с именем "primary"
-        gray: '#2a2a2ab2'
+        gray: '#2a2a2ab2',
+        middleGray: 'rgba(235, 235, 245, 0.3)'
       },
       backgroundColor: {
-        primary: "#297bff", // Добавляем кастомный цвет с именем "primary"
+        primary: "#1c1c1e", // Добавляем кастомный цвет с именем "primary"
       },
       backgroundImage: {
         buttonGradient: "linear-gradient(123deg, #6aa3ff 0%, #3180ff 100%)",

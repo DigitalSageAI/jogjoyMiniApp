@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import StartPage from './pages/StartPage';
 import { useEffect } from 'react';
 import GetStartedPage from './pages/GetStartedPage';
+import SignInPage from './pages/SignInPage';
 
 function App() {
   useEffect(() => {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<StartPage />} index />
         <Route path='/getStarted' element={<GetStartedPage />} />
+        <Route path='/signin' element={<SignInPage />} />
       </Routes>
     </div>
   );
