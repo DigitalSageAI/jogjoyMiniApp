@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+        syne: ['"Syne"', 'sans-serif'],
       },
       colors: {
         primary: "#297bff", // Добавляем кастомный цвет с именем "primary"
