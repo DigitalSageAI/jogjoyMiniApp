@@ -17,7 +17,7 @@ function App() {
   return (
     <div className="App flex flex-col justify-start items-center w-[100%]">
       <Routes>
-        <Route element={<StartPage />} index />
+        <Route path='/' element={<StartPage />} index />
       </Routes>
     </div>
   );
