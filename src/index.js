@@ -4,10 +4,11 @@ import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const tg = window.Telegram.WebApp;
-tg.expand();
+document.addEventListener('DOMContentLoaded', () => {
+  Telegram.WebApp.ready()
+  Telegram.WebApp.expand()
+})
 root.render(
   <BrowserRouter>
     <App />
