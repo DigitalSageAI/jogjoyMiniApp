@@ -4,14 +4,10 @@ import { useEffect } from 'react';
 
 function App() {
   useEffect(() => {
-    if (window.Telegram && window.Telegram.WebApp) {
-      const tg = window.Telegram.WebApp;
-      console.log("Инициализируем Telegram WebApp API...");
-      tg.ready(); // Инициализация WebApp API
-      tg.expand(); // Полноэкранный режим
-    } else {
-      console.error("Telegram WebApp API недоступен");
-    }
+
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+
   }, []);
 
   return (

@@ -2,9 +2,11 @@ import React, { useEffect } from 'react'
 
 function StartPage() {
     useEffect(() => {
-        let tg = window.Telegram.WebApp;
-        tg.expand();   
-    }, [])
+
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+  
+    }, []);
   return (
     <div className='flex flex-col justify-center items-start w-[100%]'>
         <img 
@@ -12,6 +14,7 @@ function StartPage() {
             alt="start" 
             className='w-full h-[full]'
         />
+        afdsafsd
     </div>
   )
 }
