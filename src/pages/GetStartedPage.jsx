@@ -33,7 +33,7 @@ function GetStartedPage() {
           >
             Increase your running efficiency with the help of technique analysis and individualized training
           </p>
-          <Button onClick={() => navigate('/signin')} className="mb-[12px]">Get started</Button>
+          <Button onClick={() => navigate('/getFreeAccount')} className="mb-[12px]">Get started</Button>
         </>
       )}
     </div>

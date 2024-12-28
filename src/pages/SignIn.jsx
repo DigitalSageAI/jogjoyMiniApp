@@ -1,23 +1,23 @@
 import React, { useState } from 'react'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
+import { useNavigate } from 'react-router-dom'
 
-function SignInPage() {
-    const [name, setName] = useState()
+function SignIn() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+
+    const navigate = useNavigate()
 
     const sendInfo = () => {
         console.log('info sending');
         
     }
-    console.log(name, email, password);
+    console.log(email, password);
     
   return (
     <div className='flex flex-col justify-start items-center bg-primary w-[100%] h-[100%]'>
-        <p className='font-sans text-[17px] font-normal mt-[49px] w-[90%] text-right' style={{color: '#fff', opacity: ".5"}}>Skip</p>
-        <p className='font-syne text-[21px] text-white font-semibold mt-[29px] w-[90%] text-left'>Sign In</p>
-        <Input value={name} onChange={(e) => setName(e.target.value)} className="mt-4" placeholder={'Your name and surname'}></Input>
+        <p className='font-syne text-[21px] text-white font-semibold mt-[79px] w-[90%] text-left'>Sign in</p>
         <Input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-4" placeholder={'Email Address'}></Input>
         <Input value={password} onChange={(e) => setPassword(e.target.value)} className="mt-4" placeholder={'Your password'}></Input>
         <Button className="mt-4" onClick={sendInfo}>Get started</Button>
@@ -33,4 +33,4 @@ function SignInPage() {
   )
 }
 
-export default SignInPage
+export default SignIn
