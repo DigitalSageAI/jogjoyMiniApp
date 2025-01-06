@@ -56,7 +56,7 @@ function GetFreeAccount() {
 
     return (
         <div className='flex flex-col justify-start items-center bg-primary w-[100%] h-[100%]'>
-            <p className='font-sans text-[17px] font-normal mt-[29px] w-[90%] text-right' style={{ color: '#fff', opacity: '.5' }}>Skip</p>
+            <p className='font-sans text-[17px] font-normal mt-[29px] w-[90%] text-right' style={{ color: '#fff', opacity: '.5' }} onClick={() => navigate('/main')}>Skip</p>
             <p className='font-syne text-[21px] text-white font-semibold mt-[19px] w-[90%] text-left'>Get your free account</p>
 
             <Input

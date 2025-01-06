@@ -13,7 +13,8 @@ module.exports = {
       colors: {
         primary: "#297bff", // Добавляем кастомный цвет с именем "primary"
         gray: '#2a2a2ab2',
-        middleGray: 'rgba(235, 235, 245, 0.3)'
+        middleGray: 'rgba(235, 235, 245, 0.3)',
+        lightGray: "#fff"
       },
       backgroundColor: {
         primary: "#1c1c1e", // Добавляем кастомный цвет с именем "primary"
