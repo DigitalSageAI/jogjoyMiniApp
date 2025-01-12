@@ -22,6 +22,7 @@ function GetStartedPage() {
     })
     .then(response => {
       if(response.data){
+        localStorage.setItem("id", response.data.user._id)
         navigate('/main')
       }
     })

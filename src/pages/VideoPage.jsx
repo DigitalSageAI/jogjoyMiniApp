@@ -1,7 +1,9 @@
 import React, { useRef } from 'react'
 import Button from '../components/ui/Button'
+import { useNavigate } from 'react-router-dom';
 function VideoPage() {
     const fileInputRef = useRef(null);
+    const navigate = useNavigate()
 
     const handleUploadClick = () => {
       fileInputRef.current.click();
@@ -36,7 +38,7 @@ function VideoPage() {
         </div>
 
         <img src="/images/videoWrapper.png" className='w-[90%] mt-6' alt="" />
-        <Button onClick={handleUploadClick} className="w-[90%] h-[52px] mt-[30px] mb-[15px] ">Add a video</Button>
+        <Button onClick={() => navigate('/uploading')} className="w-[90%] h-[52px] mt-[30px] mb-[15px] ">Add a video</Button>
         <input
         type="file"
         accept="video/*"

@@ -32,14 +32,14 @@ function Cabinet() {
           />
         </div>
 
-        <div className="mt-[13px] w-[95%] h-[46px] rounded-[10px] flex justify-between items-center px-[10px]" style={{border: '1px solid rgba(60, 60, 67, 0.2)'}}>
+        {/* <div className="mt-[13px] w-[95%] h-[46px] rounded-[10px] flex justify-between items-center px-[10px]" style={{border: '1px solid rgba(60, 60, 67, 0.2)'}}>
             <div className="gap-[5px] flex justify-start items-center">
                 <img src="/icons/pen.svg" alt="" />
                 <p>Edit Profile</p>
             </div>
             <img src="/icons/Arrow.png" className='w-[19px]' alt="" />
-        </div>
-        <div onClick={() => navigate('/support')} className="mt-[8px] w-[95%] h-[46px] rounded-[10px] flex justify-between items-center px-[10px]" style={{border: '1px solid rgba(60, 60, 67, 0.2)'}}>
+        </div> */}
+        <div onClick={() => navigate('/support')} className="mt-[65px] w-[95%] h-[46px] rounded-[10px] flex justify-between items-center px-[10px]" style={{border: '1px solid rgba(60, 60, 67, 0.2)'}}>
             <div className="gap-[5px] flex justify-start items-center">
                 <img src="/icons/letter.svg" alt="" />
                 <p>Contact Support</p>

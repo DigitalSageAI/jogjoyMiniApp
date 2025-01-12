@@ -13,6 +13,12 @@ import Cabinet from './pages/Cabinet';
 import Support from './pages/Support';
 import Feedback from './pages/Feedback';
 import Notifications from './pages/Notifications';
+import Payment from './pages/Payment';
+import Uploading from './pages/Uploading';
+import Stats from './pages/Stats';
+import Workout from './pages/Workout';
+import Ananlysis from './pages/Ananlysis';
+import FullMetric from './pages/FullMetric';
 
 function App() {
   useEffect(() => {
@@ -30,8 +36,14 @@ function App() {
           <Route path='/feedback' element={<Feedback />} />
           <Route path='/notifications' element={<Notifications />} />
           <Route path='/video' element={<VideoPage />} />
+          <Route path='/stats' element={<Stats />} />
+          <Route path='/workout' element={<Workout />} />
+          <Route path='/analysis' element={<Ananlysis />} />
+          <Route path='/fullMetric' element={<FullMetric />} />
+          <Route path='/uploading' element={<Uploading />} />
           <Route path='/cabinet' element={<Cabinet />} />
         </Route>
+        <Route path='/payment' element={<Payment />} />
         <Route path='/' element={<StartPage />} index />
         <Route path='/signIn' element={<SignIn />} />
         <Route path='/getStarted' element={<GetStartedPage />} />

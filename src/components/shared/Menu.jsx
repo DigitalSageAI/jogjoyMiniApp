@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import Metric from '../ui/Metric';
+import axios from '../../axios'
 
 function Menu() {
   const [isOpen, setIsOpen] = useState(false);
+  const id = localStorage.getItem('id')
+  const [subscribe, setSubscribe] = useState(null)
+
+  useEffect(() => {
+    axios.get(`/getUserById/${id}`)
+    .then(response => response.data)
+    .then(data => {
+      if(data){
+        setSubscribe(data.subscribe)        
+      }
+    })
+  }, [])
+
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -53,11 +67,14 @@ function Menu() {
           </div>
           <div className='mt-4 mb-5'>
             <h3 className='font-semibold mb-2 font-syne'>Metrics</h3>
-
-            <Metric percent={68} title={'Footstrike Proximity to Center of Gravity'}/>
-            <Metric percent={34} title={'Footstrike Position'}/>
-            <Metric percent={71} title={'Upper Body Movement'}/>
-            <Metric percent={28} title={'Trunk Inclination Angle'}/>
+            { subscribe != null &&
+               <>
+              <Metric percent={68} title={'Footstrike Proximity to Center of Gravity'}/>
+              <Metric blured={subscribe == false ? true : false} percent={34} title={'Footstrike Position'}/>
+              <Metric blured={subscribe == false ? true : false} percent={71} title={'Upper Body Movement'}/>
+              <Metric blured={subscribe == false ? true : false} percent={28} title={'Trunk Inclination Angle'}/>
+              </>
+            }
           </div>
         </div>
       </div>
