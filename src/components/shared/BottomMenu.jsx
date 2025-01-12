@@ -7,7 +7,7 @@ function BottomMenu() {
 
   const menuItems = [
     { id: 'home', icon: '/bottomMenu/1.svg', route: '/main' },
-    { id: 'stats', icon: '/bottomMenu/2.svg', route: '/stats' },
+    { id: 'stats', icon: '/bottomMenu/2.svg', route: '/analysis' },
     { id: 'video', icon: '/bottomMenu/3.svg', route: '/video' },
     { id: 'analytics', icon: '/bottomMenu/4.svg', route: '/workout' },
     { id: 'profile', icon: '/bottomMenu/5.svg', route: '/cabinet' },
