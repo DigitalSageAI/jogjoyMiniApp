@@ -28,21 +28,21 @@ function Workout() {
             <Button onClick={() => navigate('/payment')} className="absolute bottom-3">Get access</Button>
         </div> :
         <div className='flex flex-col justify-start items-center relative h-[100%]'>
-            <p className='font-syne font-semibold text-white text-[17px] mt-4'>Work out</p>
+            <p className='font-syne font-semibold text-white text-[17px] mt-4'>Тренировка</p>
             <div className="flex flex-col justify-start items-center w-[343px] rounded-[8px] gap-[8px] py-2 mt-[20px]" style={{ background: 'rgba(116, 116, 128, 0.18)' }}>
                 <div className="w-[90%] flex justify-between items-center">
-                    <p className='text-white font-sans text-[13px] opacity-60'>Number of days per week</p>
+                    <p className='text-white font-sans text-[13px] opacity-60'>Количество дней в неделю</p>
                     <p className='text-white font-sans text-[13px]'>3</p>
                 </div>
                 <img src="/images/Line.svg" alt="" />
                 <div className="w-[90%] flex justify-between items-center">
-                    <p className='text-white font-sans text-[13px] opacity-60'>Duration of the training program</p>
-                    <p className='text-white font-sans text-[13px]'>1 month</p>
+                    <p className='text-white font-sans text-[13px] opacity-60'>Продолжительность тренировок</p>
+                    <p className='text-white font-sans text-[13px]'>1 месяц</p>
                 </div>
             </div>
-            <p className='text-[14px] font-sans font-semibold mt-[22px] w-[343px] text-left' style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Select workout days by clicking on the date</p>
+            <p className='text-[14px] font-sans font-semibold mt-[22px] w-[343px] text-left' style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Выберите дни тренировок, нажав на дату</p>
 
-            <Button className="absolute bottom-3" onClick={() => navigate('/training')}>Ready!</Button>
+            <Button className="absolute bottom-3" onClick={() => navigate('/training')}>Готов!</Button>
         </div>
     }
     {

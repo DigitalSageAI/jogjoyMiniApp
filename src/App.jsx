@@ -19,6 +19,9 @@ import Stats from './pages/Stats';
 import Workout from './pages/Workout';
 import Ananlysis from './pages/Ananlysis';
 import FullMetric from './pages/FullMetric';
+import TrainingPage from './pages/TrainingPage';
+import Results from './pages/Results';
+import Prompt from './pages/Prompt';
 
 function App() {
   useEffect(() => {
@@ -41,7 +44,11 @@ function App() {
           <Route path='/analysis' element={<Ananlysis />} />
           <Route path='/fullMetric' element={<FullMetric />} />
           <Route path='/uploading' element={<Uploading />} />
+          <Route path='/trainingPage' element={<TrainingPage />} />
           <Route path='/cabinet' element={<Cabinet />} />
+          <Route path='/results' element={<Results />} />
+          <Route path='/prompt' element={<Prompt />} />
+
         </Route>
         <Route path='/payment' element={<Payment />} />
         <Route path='/' element={<StartPage />} index />
