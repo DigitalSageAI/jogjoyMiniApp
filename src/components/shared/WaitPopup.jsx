@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function WaitPopup() {
+function WaitPopup({ closePopup }) {
   const [timeLeft, setTimeLeft] = useState(0); // Состояние для оставшегося времени
   const savedTime = localStorage.getItem('time'); // Дата из localStorage
 
@@ -16,6 +16,7 @@ function WaitPopup() {
         if (difference <= 0) {
           clearInterval(timer); // Остановить таймер, если время истекло
           window.location.reload()
+          closePopup()
         }
       };
 
@@ -35,6 +36,11 @@ function WaitPopup() {
       >
         <img src="/logo.svg" className="z-50" alt="Logo" />
         <p className="text-white font-sans w-[90%] text-center mt-5 z-50">
+          {
+            timeLeft < 0 &&
+            <img onClick={() => closePopup()} className='absolute top-3 right-3' src='/icons/Close.svg' />
+          }
+          
           {timeLeft > 0 ? (
             <>Подождите пожалуйста, ваш анализ будет готов через {timeLeft} секунд.</>
           ) : (

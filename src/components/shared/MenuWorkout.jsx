@@ -73,7 +73,7 @@ function MenuWorkout() {
       <div 
         style={{ borderRadius: "0 0px 5px 5px", marginTop: "-1px" }}
         className={`transition-all duration-300 overflow-hidden ${
-            isOpen ? 'max-h-[1000px]' : 'max-h-0'
+            isOpen ? 'max-h-[1100px]' : 'max-h-0'
           } bg-white`}
       >
         <div className='p-2 w-[100%] flex flex-col justify-start items-center' style={{ background: "#393939" }}>

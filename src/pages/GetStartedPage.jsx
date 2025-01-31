@@ -78,7 +78,7 @@ function GetStartedPage() {
           </p>
 
           <p className="text-white text-xs break-all w-[342px] mb-4">
-            Telegram ID: {userId ?? "Не найден"}
+            {/* Telegram ID: {userId ?? "Не найден"} */}
           </p>
 
           <Button onClick={getTelegramId} className="mb-[12px]" disabled={!userId}>

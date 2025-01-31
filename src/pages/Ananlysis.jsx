@@ -16,6 +16,7 @@ function Analysis() {
   const [isVideo, setIsVideo] = useState(false);
   const navigate = useNavigate()
 
+
   useEffect(() => {
     axios
       .get(`/getUserById/${id}`)
@@ -24,7 +25,7 @@ function Analysis() {
         if (data) {
           setSubscribe(data.subscribe);
         }
-        if (data.analysis?.videoUrl) {
+        if (data.analysis?.videoUrl) { 
           setIsVideo(true);
           const videoApiUrl = `https://ai.jogjoy.run/apik/uploads/${data.analysis.videoUrl}`;
           const resultsApiUrl = `https://ai.jogjoy.run/apik/metrics/${data.analysis.videoUrl}?lang=en`;
@@ -93,12 +94,15 @@ function Analysis() {
   const handleCloseModal = () => {
     setIsModalOpen(false); // Закрыть модальное окно
   };
+  const closePopup = () => {
+    setError(false)
+  }
 
   return (
     <div className="relative flex flex-col justify-start items-center w-[100%]">
       {
         error &&
-      <WaitPopup></WaitPopup>
+      <WaitPopup closePopup={closePopup}></WaitPopup>
       }
       <p className="font-syne mt-4 text-[17px] text-white font-semibold">Анализ</p>
       <img src="/icons/shared.svg" className="absolute top-[10px] right-[10px]" alt="" />

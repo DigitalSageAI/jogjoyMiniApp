@@ -30,7 +30,7 @@ function Prompt() {
 - СБУ 2 раза в неделю после бега.
 - 1 раз в две недели анализ техники бега.
 Разовый объем тренировок не должен превышать 80% от ${marathonDistance} км. Количество тренировок в неделю - ${weeklyTrainings}.
-Ответ верни в формате который я тебе приведу, твоя задача прописать каждую неделю, без лишних слов которые не касаются тренировки:
+Ответ верни в формате JSON (без строк) который я тебе приведу, твоя задача прописать каждую неделю, без лишних слов которые не касаются тренировки:
 [
   {
     week1: {
@@ -46,38 +46,49 @@ function Prompt() {
 `;
 
 
-    try {
-      if(id){
-        setLoading(true)
-        const response = await axios.post('/generate', { prompt });
-        const data = response.data;
-        if (data) {
-          
-          setGeneratedPrompt(data?.content);
-          console.log(JSON.parse(data?.content))
-          axios.post('/saveTraining', {
-            userId: id,
-            trainingPlan: JSON.parse(data?.content)
-          })
-          .then(res => res.data)
-          .then(data => {
-            if(data){
-              setLoading(false)
-              navigate('/main')
-            }
-          })
-          .catch((err) => {
-            alert("Не удалось сохранить данные")
-            setLoading(false)
-          })
-        }
-      }else{
-        alert('Ошибка авторизации')
-      }
-    } catch (error) {
-        setLoading(false)
-      setError('Не удалось сгенерировать план. Попробуйте снова.');
+try {
+  if (id) {
+    setLoading(true);
+    const response = await axios.post('/generate', { prompt });
+    let data = response.data?.content;
+
+    console.log("Сырой ответ OpenAI:", data);
+
+    // Убираем лишние кавычки, если ответ пришел в виде строки
+    if (typeof data === "string") {
+      data = data.replace(/^"|"$/g, ""); // Убираем начальные и конечные кавычки
     }
+
+    const parsedData = JSON.parse(data);
+    console.log("Парсинг JSON успешен:", parsedData);
+
+    setGeneratedPrompt(parsedData);
+
+    axios.post('/saveTraining', {
+      userId: id,
+      trainingPlan: parsedData
+    })
+    .then(res => res.data)
+    .then(data => {
+      if (data) {
+        setLoading(false);
+        navigate('/main');
+      }
+    })
+    .catch((err) => {
+      alert("Не удалось сохранить данные");
+      setLoading(false);
+    });
+
+  } else {
+    alert('Ошибка авторизации');
+  }
+} catch (error) {
+  setLoading(false);
+  console.error("Ошибка парсинга JSON:", error.message);
+  setError('Не удалось сгенерировать план. Попробуйте снова.');
+}
+
   };
 
   return (
@@ -85,6 +96,7 @@ function Prompt() {
         {
             loading && <Loading/>
         }
+        <img onClick={() => navigate(-1)} className='absolute top-3 right-3' src='/icons/Close.svg' />
       <h1 className="text-xl font-bold mb-4 text-white">Создание тренировочной программы</h1>
       <div className="mb-4">
         <label className="block mb-2 text-white">Уровень</label>
