@@ -104,12 +104,22 @@ try {
           value={level}
           onChange={(e) => setLevel(e.target.value)}
           className="border p-2 w-full"
-          style={{ background: "none", borderRadius: "5px", color: "white", outline: "none" }}
+          style={{ background: "#323232", borderRadius: "5px", color: "white", outline: "none" }}
         >
           <option value="начинающий">Начинающий</option>
           <option value="средний">Средний</option>
           <option value="продвинутый">Продвинутый</option>
         </select>
+      </div>
+      <div className="mb-4">
+        <label className="block mb-2 text-white">Дистанция забега (км)</label>
+        <input
+          type="number"
+          value={marathonDistance}
+          onChange={(e) => setMarathonDistance(e.target.value)}
+          className="border p-2 w-full"
+          style={{ background: "none", borderRadius: "5px", color: "white", outline: "none" }}
+        />
       </div>
       <div className="mb-4">
         <label className="block mb-2 text-white">Текущий результат (минуты)</label>
@@ -132,22 +142,12 @@ try {
         />
       </div>
       <div className="mb-4">
-        <label className="block mb-2 text-white">Дистанция забега (км)</label>
-        <input
-          type="number"
-          value={marathonDistance}
-          onChange={(e) => setMarathonDistance(e.target.value)}
-          className="border p-2 w-full"
-          style={{ background: "none", borderRadius: "5px", color: "white", outline: "none" }}
-        />
-      </div>
-      <div className="mb-4">
         <label className="block mb-2 text-white">Сколько времени осталось до забега</label>
         <select
           value={timeLeft}
           onChange={(e) => setTimeLeft(e.target.value)}
           className="border p-2 w-full"
-          style={{ background: "none", borderRadius: "5px", color: "white", outline: "none" }}
+          style={{ background: "#323232", borderRadius: "5px", color: "white", outline: "none" }}
         >
           <option value="1 неделя">1 неделя</option>
           <option value="2 недели">2 недели</option>

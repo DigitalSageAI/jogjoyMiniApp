@@ -51,7 +51,7 @@ function MenuWorkout() {
         style={{ background: "#393939", borderRadius: "5px 13px 0 0 ", marginTop: "-15px" }} 
         onClick={toggleMenu}
       >
-        <span className='font-semibold text-lg font-syne'>Программа тренировок</span>
+        <span className='font-semibold text-[16px] font-syne'>Программа подготовки к забегу</span>
         <div style={{ 
           backgroundImage: "url('/icons/Vector 11.png')", 
           backgroundSize: 'cover', 

@@ -36,22 +36,7 @@ function GetStartedPage() {
   }, [initData]);
 
   const getTelegramId = () => {
-    if (!userId) {
-      alert('Не удалось получить Telegram ID');
-      return;
-    }
-
-    axios.post('/getTelegramId', { telegramId: userId })
-      .then(response => {
-        if (response.data?.user?._id) {
-          localStorage.setItem("id", response.data.user._id);
-          navigate('/main');
-        }
-      })
-      .catch(error => {
-        console.error('Ошибка при отправке данных:', error);
-        alert('Произошла ошибка');
-      });
+    navigate('/main');
   };
 
   return (
@@ -74,7 +59,7 @@ function GetStartedPage() {
             className="font-sans text-[15px] text-white w-[342px] text-left mb-[24px]"
             style={{ color: 'rgba(255, 255, 255, 0.6)' }}
           >
-            Повысьте эффективность своего бега с помощью анализа техники и индивидуальных тренировок
+            Повысьте эффективность своего бега с помощью анализа техники и индивидуальных тренировок. Бегайте быстрее и эффективнее благодаря анализу техники и персональному плану тренировок с ИИ.
           </p>
 
           <p className="text-white text-xs break-all w-[342px] mb-4">

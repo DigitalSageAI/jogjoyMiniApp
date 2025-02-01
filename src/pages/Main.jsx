@@ -27,7 +27,7 @@ function Main() {
             </div>
 
             <div className="font-syne text-white font-semibold text-[21px] w-[340px] mb-[24px] text-left">
-            Ознакомьтесь с функциями приложения
+            Вы желаете подготовится к забегу или проанализировать свою технику?
             </div>
 
             <MenuWorkout />

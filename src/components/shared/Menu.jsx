@@ -103,7 +103,7 @@ function Menu() {
         style={{ background: "#393939", borderRadius: "5px 13px 0 0 ", marginTop: "10px" }} 
         onClick={toggleMenu}
       >
-        <span className="font-semibold text-lg font-syne">Analysis</span>
+        <span className="font-semibold text-lg font-syne">Анализ</span>
         <div style={{ 
           backgroundImage: "url('/icons/Vector 11.png')", 
           backgroundSize: 'cover', 
