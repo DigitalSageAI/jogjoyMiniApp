@@ -15,12 +15,13 @@ function StartPage() {
           
           if (userData) {
             const userObj = JSON.parse(decodeURIComponent(userData));
+
             if (!userObj.id) {
               alert('Не удалось получить Telegram ID');
               return;
             }
         
-            axios.post('/getTelegramId', { telegramId: userObj.id })
+            axios.post('/getTelegramId', { initData: userObj.id })
               .then(response => {
                 if (response.data?.user?._id) {
                   localStorage.setItem("id", response.data.user._id);
