@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Metric from '../components/ui/Metric';
 import axios from '../axios';
 import Loading from '../components/ui/Loading';
+import WaitPopup from '../components/shared/WaitPopup';
 import Button from '../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,7 +10,6 @@ function Analysis() {
   const id = localStorage.getItem('id');
   const [subscribe, setSubscribe] = useState(null);
   const [videoUrl, setVideoUrl] = useState('');
-  const [previewUrl, setPreviewUrl] = useState(''); // Превью видео
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [metrics, setMetrics] = useState(null);
   const [error, setError] = useState(false);
@@ -17,17 +17,21 @@ function Analysis() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Функция проверки мобильного устройства
-  const isMobile = window.innerWidth <= 768;
-
   useEffect(() => {
-    axios.get(`/getUserById/${id}`)
+    const isNewFetch = localStorage.getItem('newFetch')
+    if(isNewFetch == "true"){
+      console.log(isNewFetch)
+      localStorage.setItem('newFetch', false)
+      window.location.href = window.location.href;
+
+    }
+    axios
+      .get(`/getUserById/${id}`)
       .then(({ data }) => {
         setSubscribe(data.subscribe);
         if (data.analysis?.videoUrl) {
           setIsVideo(true);
           const videoApiUrl = `https://ai.jogjoy.run/apik/uploads/${data.analysis.videoUrl}`;
-          const previewApiUrl = `https://ai.jogjoy.run/apik/previews/${data.analysis.videoUrl}.jpg`; // Предполагаем, что превью хранится в таком виде
           const resultsApiUrl = `https://ai.jogjoy.run/apik/metrics/${data.analysis.videoUrl}?lang=en`;
 
           return Promise.all([
@@ -40,15 +44,6 @@ function Analysis() {
             })
               .then((res) => res.ok ? res.blob() : Promise.reject('Failed to fetch video'))
               .then((blob) => setVideoUrl(URL.createObjectURL(blob))),
-            fetch(previewApiUrl, {
-              method: 'GET',
-              headers: {
-                'x-api-key': 'b0ec52c0-5962-4100-bf78-1ab38d8fc52f',
-                'x-access-token': '11ba0902-2fc1-4059-9c0e-6c0bb8fa6e70',
-              },
-            })
-              .then((res) => res.ok ? res.blob() : Promise.reject('Failed to fetch preview'))
-              .then((blob) => setPreviewUrl(URL.createObjectURL(blob))),
             fetch(resultsApiUrl, {
               method: 'GET',
               headers: {
@@ -66,6 +61,8 @@ function Analysis() {
       .finally(() => setLoading(false));
   }, []);
 
+  
+
   if (loading) return <Loading />;
 
   return (
@@ -74,18 +71,20 @@ function Analysis() {
       <img src="/icons/shared.svg" className="absolute top-[10px] right-[10px]" alt="" />
       <div className={`mb-[15px] bg-white rounded-[10px] w-[343px] ${isVideo ? 'h-[631px]' : 'h-[171px]'} flex flex-col justify-start mt-[15px]`}>
         <div className="flex justify-center items-start mt-[15px] relative">
-          {isVideo && previewUrl && (
+          {isVideo && videoUrl && (
             <img src="/icons/playVideo.svg" className="absolute top-[60px]" alt="" />
           )}
-          {isVideo && (
+          {isVideo && videoUrl ? (
             <video
-              src={!isMobile ? videoUrl : null} // Если мобильное устройство, не загружаем видео
+              src={videoUrl}
               className="rounded-lg w-[95%] cursor-pointer h-[200px] object-cover"
               onClick={() => setIsModalOpen(true)}
-              poster={previewUrl || "/default-preview.jpg"} // Устанавливаем превью
-              muted
+              // onLoadedData={(e) => e.target.pause()}
+              // muted
             />
-          )}
+          ) : isVideo ? (
+            <Loading />
+          ) : null}
         </div>
         <div className="mt-4 mb-5 ml-[10px]">
           {isVideo && <h3 className="font-semibold mb-2 font-syne">Metrics</h3>}
