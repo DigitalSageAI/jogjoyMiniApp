@@ -129,14 +129,13 @@ function Menu() {
           )}
           {isVideo && videoUrl ? (
             <video
-              src={videoUrl}
-              className="rounded-lg w-[95%] cursor-pointer h-[200px] object-cover"
-              onClick={handleImageClick} 
-              onLoadedData={(e) => {
-                e.target.pause();
-              }}
-              muted
-            />
+            src={videoUrl}
+            className="rounded-lg w-[95%] cursor-pointer h-[200px] object-cover"
+            onClick={() => setIsModalOpen(true)}
+            onLoadedData={(e) => e.target.pause()}
+            muted
+            poster={videoUrl || '/images/video.png'}
+          />
           ) : (
             <div>
               {
