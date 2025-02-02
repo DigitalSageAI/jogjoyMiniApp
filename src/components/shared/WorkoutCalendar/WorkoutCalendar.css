@@ -1,0 +1,22 @@
+.highlight {
+    background-color: #0bc4ed;
+    color: white;
+    border-radius: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+
+.react-calendar__tile--now {
+    background: none;
+    color: black;
+}
+
+.react-calendar__navigation__label {
+    pointer-events: none
+    
+}
+
+.react-calendar__navigation__prev2-button, .react-calendar__navigation__next2-button {
+    display: none
+}

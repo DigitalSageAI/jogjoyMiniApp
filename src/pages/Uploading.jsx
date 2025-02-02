@@ -3,12 +3,14 @@ import Button from '../components/ui/Button';
 import './styles/LoadingAnimation.css';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axios'
+import WaitPopup from '../components/shared/WaitPopup';
 
 
 function Uploading() {
   const [isUploading, setIsUploading] = useState(false);
   const id = localStorage.getItem('id')
   const [uploadProgress, setUploadProgress] = useState('');
+  const [wait, setWait] = useState(false)
   const navigate = useNavigate();
 
   const handleFileUpload = async (event) => {
@@ -42,14 +44,16 @@ function Uploading() {
   
 
       const aproxim_time_left_value = responseData["aproxim_time_left(sec)"]; // 100 секунд
+      console.log('оставшее вреся', aproxim_time_left_value)
 
       // Получаем текущую дату и прибавляем 100 секунд (100 * 1000 миллисекунд)
-      const futureDate = new Date(Date.now() + aproxim_time_left_value * 1000);
+      const futureDate = new Date(Date.now() + (aproxim_time_left_value + 10) * 1000);
 
       // Преобразуем дату в строку (ISO 8601 формат)
       const futureDateString = futureDate.toISOString();
 
       // Сохраняем дату в localStorage
+      localStorage.setItem('newFetch', true)
       localStorage.setItem('time', futureDateString);
     
 
@@ -65,7 +69,8 @@ function Uploading() {
         .then(res => res.data)
         .then(data => {
           if(data){
-            navigate('/analysis')
+            // navigate('/analysis')
+            setWait(true)
           }
         })
       }
@@ -94,6 +99,9 @@ function Uploading() {
 
   return (
     <div className="relative w-full h-full flex flex-col justify-start items-center">
+      { wait &&
+        <WaitPopup closePopup={() => setWait(false)}/>
+      }
       <p className="font-syne font-semibold text-[17px] text-white mt-[20px] z-10">
         Загрузка видео
       </p>

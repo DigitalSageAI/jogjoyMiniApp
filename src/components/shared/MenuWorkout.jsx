@@ -93,12 +93,12 @@ function MenuWorkout() {
             }
           </div>
 
-          <img src="/images/exercices/collaj.svg" className='mt-6' alt="" />
+          <img src="/images/exercices/collaj.png" className='mt-6' alt="" />
           <p className='w-[100%] font-syne text-[15px] text-white font-semibold mt-6'>Упражнения</p>
 
           {/* Отображение тренировок только для выбранной недели */}
           {filteredTraining && Object.entries(filteredTraining).map(([day, details], idx) => (
-            <div key={idx} className="w-[100%] min-h-[69px] flex flex-row justify-start items-start rounded-[10px] mt-2" style={{ border: '1px solid #606060' }}>
+            <div onClick={() => navigate('/results')} key={idx} className="w-[100%] min-h-[69px] flex flex-row justify-start items-start rounded-[10px] mt-2" style={{ border: '1px solid #606060' }}>
               <img src="/icons/green.svg" className='min-h-[65px] mt-[1px]' style={{ borderRadius: "50px 0 0 50px" }} alt="" />
               <p className='font-sans ml-[8px] text-[12px] text-white whitespace-nowrap mt-2'>День {idx + 1} <br/> {(details['СБУ'] == true || details["SБУ"] == true) && <div className='text-white font-semibold flex flex-col justify-center items-center rounded-xl mt-2' style={{ background: "rgb(100, 216, 73)" }}>СБУ</div>}</p>
               <div className="flex flex-col justify-start items-start w-[100%] gap-[3px] mt-2">

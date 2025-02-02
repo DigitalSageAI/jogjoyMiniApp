@@ -12,184 +12,112 @@ function Analysis() {
   const [videoUrl, setVideoUrl] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [metrics, setMetrics] = useState(null);
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
   const [isVideo, setIsVideo] = useState(false);
-  const navigate = useNavigate()
-
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const isNewFetch = localStorage.getItem('newFetch')
+    if(isNewFetch == "true"){
+      console.log(isNewFetch)
+      localStorage.setItem('newFetch', false)
+      window.location.href = window.location.href;
+
+    }
     axios
       .get(`/getUserById/${id}`)
-      .then((response) => response.data)
-      .then((data) => {
-        if (data) {
-          setSubscribe(data.subscribe);
-        }
-        if (data.analysis?.videoUrl) { 
+      .then(({ data }) => {
+        setSubscribe(data.subscribe);
+        if (data.analysis?.videoUrl) {
           setIsVideo(true);
           const videoApiUrl = `https://ai.jogjoy.run/apik/uploads/${data.analysis.videoUrl}`;
           const resultsApiUrl = `https://ai.jogjoy.run/apik/metrics/${data.analysis.videoUrl}?lang=en`;
-          fetch(videoApiUrl, {
-            method: 'GET',
-            headers: {
-              'x-api-key': 'b0ec52c0-5962-4100-bf78-1ab38d8fc52f',
-              'x-access-token': '11ba0902-2fc1-4059-9c0e-6c0bb8fa6e70',
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error('Failed to fetch video');
-              }
-              return response.blob();
-            })
-            .then((blob) => {
-              const videoBlobUrl = URL.createObjectURL(blob);
-              // console.log(videoBlobUrl?.slice[4, videoBlobUrl.length-1], 'videoBlobUrl');
-              
-              setVideoUrl(videoBlobUrl);
-            })
-            .catch((error) => {
-              console.error('Ошибка загрузки видео:', error)
-              setIsVideo(false);
-          });
-          fetch(resultsApiUrl, {
-            method: 'GET',
-            headers: {
-              'x-api-key': 'b0ec52c0-5962-4100-bf78-1ab38d8fc52f',
-              'x-access-token': '11ba0902-2fc1-4059-9c0e-6c0bb8fa6e70',
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error('Failed to fetch video');
-              }
-              return response.json();
-            })
-            .then((data) => {
-              console.log(data)
-              setMetrics(data?.mean_metrics)
-            })
-            .catch((error) => {
-              console.error('Ошибка загрузки видео:', error)
-              setError(true)
-          });
 
-          
-        }else{
-          setIsVideo(false); 
+          return Promise.all([
+            fetch(videoApiUrl, {
+              method: 'GET',
+              headers: {
+                'x-api-key': 'b0ec52c0-5962-4100-bf78-1ab38d8fc52f',
+                'x-access-token': '11ba0902-2fc1-4059-9c0e-6c0bb8fa6e70',
+              },
+            })
+              .then((res) => res.ok ? res.blob() : Promise.reject('Failed to fetch video'))
+              .then((blob) => setVideoUrl(URL.createObjectURL(blob))),
+            fetch(resultsApiUrl, {
+              method: 'GET',
+              headers: {
+                'x-api-key': 'b0ec52c0-5962-4100-bf78-1ab38d8fc52f',
+                'x-access-token': '11ba0902-2fc1-4059-9c0e-6c0bb8fa6e70',
+              },
+            })
+              .then((res) => res.ok ? res.json() : Promise.reject('Failed to fetch metrics'))
+              .then((data) => setMetrics(data?.mean_metrics)),
+          ]);
         }
+        setIsVideo(false);
       })
-      .catch((error) => console.error('Ошибка при загрузке данных пользователя:', error));
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleImageClick = () => {
-    if (isVideo && videoUrl) {
-      setIsModalOpen(true); // Открыть модальное окно
-    } else {
-
-      console.error('Видео еще не загружено.');
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false); // Закрыть модальное окно
-  };
-  const closePopup = () => {
-    setError(false)
-  }
+  if (loading) return <Loading />;
 
   return (
     <div className="relative flex flex-col justify-start items-center w-[100%]">
-      {
-        error &&
-      <WaitPopup closePopup={closePopup}></WaitPopup>
-      }
       <p className="font-syne mt-4 text-[17px] text-white font-semibold">Анализ</p>
       <img src="/icons/shared.svg" className="absolute top-[10px] right-[10px]" alt="" />
-
-      <div className={`mb-[15px] bg-white rounded-[10px] w-[343px] ${isVideo ? 'h-[631px]' : 'h-[171px]' } flex flex-col justify-start mt-[15px]`}>
+      <div className={`mb-[15px] bg-white rounded-[10px] w-[343px] ${isVideo ? 'h-[631px]' : 'h-[171px]'} flex flex-col justify-start mt-[15px]`}>
         <div className="flex justify-center items-start mt-[15px] relative">
-          { isVideo &&
-            videoUrl &&
-            <img src="/icons/playVideo.svg" className='absolute top-[60px]' style={{ pointerEvents: "none" }} alt="" />
-          }
-          { isVideo && videoUrl ? (
+          {isVideo && videoUrl && (
+            <img src="/icons/playVideo.svg" className="absolute top-[60px]" alt="" />
+          )}
+          {isVideo && videoUrl ? (
             <video
               src={videoUrl}
               className="rounded-lg w-[95%] cursor-pointer h-[200px] object-cover"
-              onClick={handleImageClick} // Открыть модальное окно
-              onLoadedData={(e) => {
-                e.target.pause(); // Остановить воспроизведение на первом кадре
-              }}
+              onClick={() => setIsModalOpen(true)}
+              onLoadedData={(e) => e.target.pause()}
               muted
             />
-          ) : (
-            <div>
-            {
-              isVideo &&
+          ) : isVideo ? (
             <Loading />
-            }
-          </div>
-          )}
+          ) : null}
         </div>
         <div className="mt-4 mb-5 ml-[10px]">
-        {
-            isVideo &&
-          <h3 className="font-semibold mb-2 font-syne">Metrics</h3>
-          }
-          {subscribe != null && metrics != null ? (
-            <>
-              <Metric percent={+metrics[0]?.toString().slice(2, 4)} title={'Удар ногой к центру тяжести'} />
-              <Metric blured={subscribe === false} percent={+metrics[1]?.toString().slice(2, 4)} title={'Положение для удара ногой'} />
-              <Metric blured={subscribe === false} percent={+metrics[2]?.toString().slice(2, 4)} title={'Движение верхней части тела'} />
-              <Metric blured={subscribe === false} percent={+metrics[3]?.toString().slice(2, 4)} title={'Угол наклона ствола'} />
-            </>
+          {isVideo && <h3 className="font-semibold mb-2 font-syne">Metrics</h3>}
+          {subscribe !== null && metrics !== null ? (
+            metrics.map((metric, index) => (
+              <Metric
+                key={index}
+                percent={+metric?.toString().slice(2, 4)}
+                title={["Удар ногой к центру тяжести", "Положение для удара ногой", "Движение верхней части тела", "Угол наклона ствола"][index]}
+                blured={subscribe === false && index > 0}
+              />
+            ))
           ) : (
             <>
-              <div className={`flex flex-col justify-start items-center`}>
+              <div className="flex flex-col justify-start items-center">
                 Чтобы получить анализ загрузите пожалуйста видео вашего бега
               </div>
-                <Button className="w-[97%] mt-4" onClick={subscribe ? () => navigate('/analysis') : () => navigate('/payment')}>Перейти к анализу</Button>
-              {
-                isVideo &&
-                <Loading />
-              }
-              
-
+              <Button className="w-[97%] mt-4" onClick={() => navigate(subscribe ? '/analysis' : '/payment')}>
+                Перейти к анализу
+              </Button>
             </>
           )}
         </div>
       </div>
-
-      {/* Модальное окно для воспроизведения видео */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-30">
           <div className="relative w-[90%] max-w-[600px]">
-            <video
-              src={videoUrl}
-              controls
-              autoPlay
-              className="rounded-lg w-full"
-            />
-            <button
-              onClick={handleCloseModal}
-              className="absolute top-2 right-2 text-white bg-gray rounded-full px-[6px] "
-            >
-              ✕
-            </button>
+            <video src={videoUrl} controls autoPlay className="rounded-lg w-full" />
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-2 right-2 text-white bg-gray rounded-full px-[6px]">✕</button>
           </div>
         </div>
       )}
-      {
-        isVideo &&
-      <Button onClick={() => navigate('/results')} className="mt-0">Получить упражнения</Button>
-      }
+      {isVideo && <Button onClick={() => navigate('/results')} className="mt-0">Получить упражнения</Button>}
     </div>
   );
 }
 
 export default Analysis;
-
-
-// const initData = 'user=%7B%22id%22%3A5056024242%2C%22first_name%22%3A%22%3C%5C%2Fabeke%3E%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22abylaikak%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FAj3hfrbNq8PfLLKvsSp3-WizcXTc3HO8Vynsw3R1a1A5spK3fDmZERABNoOGLEQN.svg%22%7D&chat_instance=-4908992446394523843&chat_type=private&auth_date=1735556539&signature=pgNJfzcxYGAcJCJ_jnsYEsmiTJJxOP2tNKb941-fT7QcsUQ2chSkFcItG8KvjR_r3nH0vem4bxtlltuyX-IwBQ&hash=c0b510163f5b1dea53172644df35e63458216a9d5d9a10413af4f5b0204bb493';
-// const initData = 'query_id=AAFaCxkqAAAAAFoLGSq2MO94&user=%7B%22id%22%3A706284378%2C%22first_name%22%3A%22%D0%9D%D0%B8%D0%BA%D0%B8%D1%82%D0%B0%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22ChilDrake%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FA9lvB76GTPMhQuwI-S0Nt5t8XAEa8SsqImGoLG9Jwb8.svg%22%7D&auth_date=1738230125&signature=e-fDQ74DxS7JxMT_Gvrcm7vziZPzleQTMRJvPTG-wtmyOG8ZZFvkwb5TdEvmkuiV6I0wYcwmyRC3mpMjxCtfCw&hash=0107f728ffa322e1c7cb605f2ca3d435684b7f98bae76fe78ab9b4bd51f1a910';

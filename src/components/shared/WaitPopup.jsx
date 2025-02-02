@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function WaitPopup({ closePopup }) {
   const [timeLeft, setTimeLeft] = useState(0); // Состояние для оставшегося времени
   const savedTime = localStorage.getItem('time'); // Дата из localStorage
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (savedTime) {
       const targetTime = new Date(savedTime).getTime();
+ 
 
       const updateCountdown = () => {
         const now = Date.now();
@@ -15,7 +18,7 @@ function WaitPopup({ closePopup }) {
 
         if (difference <= 0) {
           clearInterval(timer); // Остановить таймер, если время истекло
-          window.location.reload()
+          
           closePopup()
         }
       };
@@ -23,7 +26,10 @@ function WaitPopup({ closePopup }) {
       const timer = setInterval(updateCountdown, 1000); // Обновление каждую секунду
       updateCountdown(); // Обновить сразу после загрузки
 
-      return () => clearInterval(timer); // Очистить таймер при размонтировании компонента
+      return () => {
+        clearInterval(timer);
+        navigate('/analysis')
+       } // Очистить таймер при размонтировании компонента
     }
   }, [savedTime]);
 
