@@ -85,14 +85,13 @@ function FullMetric() {
       }
           {videoUrl ? (
             <video
-              src={videoUrl}
-              className="rounded-lg w-[90%] mt-5 cursor-pointer h-[200px] object-cover "
-              onClick={handleImageClick} // Открыть модальное окно
-              onLoadedData={(e) => {
-                e.target.pause(); // Остановить воспроизведение на первом кадре
-              }}
-              muted
-            />
+            src={videoUrl}
+            className="rounded-lg w-[95%] cursor-pointer h-[200px] object-cover"
+            onClick={() => setIsModalOpen(true)}
+            onLoadedData={(e) => e.target.pause()}
+            muted
+            poster={videoUrl || '/images/video.png'}
+          />
           ) : (
             <Loading /> // Показываем загрузку, пока URL видео не готов
           )}
