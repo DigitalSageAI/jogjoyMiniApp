@@ -71,9 +71,9 @@ function Analysis() {
       <img src="/icons/shared.svg" className="absolute top-[10px] right-[10px]" alt="" />
       <div className={`mb-[15px] bg-white rounded-[10px] w-[343px] ${isVideo ? 'h-[631px]' : 'h-[171px]'} flex flex-col justify-start mt-[15px]`}>
         <div className="flex justify-center items-start mt-[15px] relative">
-          {isVideo && videoUrl && (
+          {/* {isVideo && videoUrl && (
             <img src="/icons/playVideo.svg" className="absolute top-[60px]" alt="" />
-          )}
+          )} */}
           {isVideo && videoUrl ? (
             <video
               src={videoUrl}
@@ -81,6 +81,7 @@ function Analysis() {
               onClick={() => setIsModalOpen(true)}
               // onLoadedData={(e) => e.target.pause()}
               // muted
+              poster='/images/video.png'
             />
           ) : isVideo ? (
             <Loading />
