@@ -1,107 +1,109 @@
-import React, { useState } from 'react';
-import Button from '../components/ui/Button';
-import './styles/LoadingAnimation.css';
-import { useNavigate } from 'react-router-dom';
-import axios from '../axios'
-import WaitPopup from '../components/shared/WaitPopup';
-
+import React, { useState } from "react";
+import Button from "../components/ui/Button";
+import "./styles/LoadingAnimation.css";
+import { useNavigate } from "react-router-dom";
+import axios from "../axios";
+import WaitPopup from "../components/shared/WaitPopup";
 
 function Uploading() {
   const [isUploading, setIsUploading] = useState(false);
-  const id = localStorage.getItem('id')
-  const [uploadProgress, setUploadProgress] = useState('');
-  const [wait, setWait] = useState(false)
+  const id = localStorage.getItem("id");
+  const [uploadProgress, setUploadProgress] = useState("");
+  const [wait, setWait] = useState(false);
   const navigate = useNavigate();
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
 
     if (!file) {
-      alert('Please select a file to upload.');
+      alert("Please select a file to upload.");
       return;
     }
 
     setIsUploading(true);
-    setUploadProgress('Uploading video...');
+    setUploadProgress("Uploading video...");
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
-      const response = await fetch('https://ai.jogjoy.run/apik/file', {
-        method: 'POST',
+      const response = await fetch("https://ai.jogjoy.run/apik/file", {
+        method: "POST",
         headers: {
-          'x-api-key': 'b0ec52c0-5962-4100-bf78-1ab38d8fc52f',
-          'x-access-token': '11ba0902-2fc1-4059-9c0e-6c0bb8fa6e70',
+          "x-api-key": "b0ec52c0-5962-4100-bf78-1ab38d8fc52f",
+          "x-access-token": "11ba0902-2fc1-4059-9c0e-6c0bb8fa6e70",
         },
-        body: formData
+        body: formData,
       });
 
       const responseData = await response.json();
       const processed_filename = responseData.processed_filename;
 
-      
-  
-
       const aproxim_time_left_value = responseData["aproxim_time_left(sec)"]; // 100 секунд
-      console.log('оставшее вреся', aproxim_time_left_value)
+      await axios
+        .post("/subscribe", {
+          type: ["sub1", "sub4"],
+          id,
+          val: false,
+        })
+        .then((res) => res.data)
+        .then((data) => console.log("Успешно прошла оплата"))
+        .catch((err) => console.log("Не удалось произвести оплату"));
+      console.log("оставшее вреся", aproxim_time_left_value);
 
       // Получаем текущую дату и прибавляем 100 секунд (100 * 1000 миллисекунд)
-      const futureDate = new Date(Date.now() + (aproxim_time_left_value + 10) * 1000);
+      const futureDate = new Date(
+        Date.now() + (aproxim_time_left_value + 10) * 1000
+      );
 
       // Преобразуем дату в строку (ISO 8601 формат)
       const futureDateString = futureDate.toISOString();
 
       // Сохраняем дату в localStorage
-      localStorage.setItem('newFetch', true)
-      localStorage.setItem('time', futureDateString);
-    
+      localStorage.setItem("newFetch", true);
+      localStorage.setItem("time", futureDateString);
 
       if (!response.ok) {
         throw new Error("Failed to fetch the video");
       }
 
-      console.log(response)
-      if(response.url){
-        axios.post('/saveAnalysis', {
-          id, videoUrl: processed_filename
-        })
-        .then(res => res.data)
-        .then(data => {
-          if(data){
-            // navigate('/analysis')
-            setWait(true)
-          }
-        })
+      console.log(response);
+      if (response.url) {
+        axios
+          .post("/saveAnalysis", {
+            id,
+            videoUrl: processed_filename,
+          })
+          .then((res) => res.data)
+          .then((data) => {
+            if (data) {
+              // navigate('/analysis')
+              setWait(true);
+            }
+          });
       }
-    
 
       // const blob = await response.blob();
-    
 
       // const videoUrl = URL.createObjectURL(blob);
       // console.log(videoUrl, 'videoUrl');
-    
 
       // const a = document.createElement("a");
       // a.href = videoUrl;
-      // a.download = "video.mov"; 
+      // a.download = "video.mov";
       // document.body.appendChild(a);
       // a.click();
       // document.body.removeChild(a);
     } catch (error) {
       console.error("Ошибка при загрузке видео:", error);
-    }
- finally {
+    } finally {
       setIsUploading(false);
     }
   };
 
   return (
     <div className="relative w-full h-full flex flex-col justify-start items-center">
-      { wait &&
-        <WaitPopup closePopup={() => setWait(false)}/>
-      }
+      {wait && <WaitPopup closePopup={() => setWait(false)} />}
       <p className="font-syne font-semibold text-[17px] text-white mt-[20px] z-10">
         Загрузка видео
       </p>
@@ -116,7 +118,9 @@ function Uploading() {
           />
         </label>
       </div>
-      <Button className="absolute bottom-[20px] z-10">Отправить на анализ</Button>
+      <Button className="absolute bottom-[20px] z-10">
+        Отправить на анализ
+      </Button>
 
       {isUploading && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 flex flex-col justify-center items-center">
