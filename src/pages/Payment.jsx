@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import axios from "../axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import sha256 from "crypto-js/sha256";
 
 function Payment() {
@@ -11,6 +11,32 @@ function Payment() {
   // Объект для хранения состояния раскрытия карточек по ключу тарифа
   const [expandedCards, setExpandedCards] = useState({});
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const success = searchParams.get("Success") === "true";
+    const errorCode = searchParams.get("ErrorCode");
+
+    if (success && errorCode === "0") {
+      const type = localStorage.getItem("type"); // Достаем сохраненный тариф
+
+      if (type && id) {
+        axios
+          .post("/subscribe", {
+            type,
+            id,
+            val: true,
+          })
+          .then(() => {
+            alert("Успешно прошла оплата");
+            localStorage.removeItem("type"); // Удаляем type после оформления
+
+            navigate("/");
+          })
+          .catch(() => alert("Не удалось произвести оплату"));
+      }
+    }
+  }, [searchParams, id]);
 
   const generateToken = (data) => {
     const sortedValues = Object.keys(data)
@@ -21,38 +47,36 @@ function Payment() {
   };
 
   const payment = async () => {
-    let summ;
-    let type;
-    if (tarif == "1 month") {
+    let summ, type;
+    if (tarif === "1 month") {
       summ = 69000;
       type = "sub1";
-    } else if (tarif == "1 year") {
+    } else if (tarif === "1 year") {
       summ = 345000;
       type = "sub2";
-    } else if (tarif == "3 month") {
+    } else if (tarif === "3 month") {
       summ = 92000;
       type = "sub3";
-    } else if (tarif == "3 year") {
+    } else if (tarif === "3 year") {
       summ = 157000;
       type = "sub4";
     }
-    console.log(summ);
 
     try {
-      const orderId = `${Date.now()}-${Math.floor(Math.random() * 10000)}`; // Генерация OrderID
+      const orderId = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
       const requestData = {
         TerminalKey: "1710783332068DEMO",
         Amount: summ,
         OrderId: orderId,
         Description: "Анализ техники бега от JogJoy",
-        Password: "your_password", // Пароль терминала
+        Password: "your_password",
         NotificationURL: "https://ai.jogjoy.run/webhook",
       };
 
-      // Генерация токена
       const token = generateToken(requestData);
-      console.log(token);
-      requestData.Token = token; // Добавляем токен в запрос
+      requestData.Token = token;
+
+      localStorage.setItem("type", type); // Сохраняем тариф перед оплатой
 
       const response = await axios.post(
         "https://securepay.tinkoff.ru/v2/Init",
@@ -60,16 +84,7 @@ function Payment() {
       );
 
       if (response.data.Success) {
-        window.location.href = response.data.PaymentURL; // Открываем страницу оплаты
-        axios
-          .post("/subscribe", {
-            type,
-            id,
-            val: true,
-          })
-          .then((res) => res.data)
-          .then((data) => alert("Успешно прошла оплата"))
-          .catch((err) => alert("Не удалось произвести оплату"));
+        window.location.href = response.data.PaymentURL;
       } else {
         alert("Ошибка при создании платежа: " + response.data.Message);
       }
