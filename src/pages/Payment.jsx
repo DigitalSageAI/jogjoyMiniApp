@@ -31,7 +31,7 @@ function Payment() {
             alert("Успешно прошла оплата");
             localStorage.removeItem("type"); // Удаляем type после оформления
 
-            navigate("/");
+            navigate("/main");
           })
           .catch(() => alert("Не удалось произвести оплату"));
       }
