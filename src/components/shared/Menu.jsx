@@ -164,7 +164,7 @@ function Menu() {
               onClick={() => setIsModalOpen(true)}
               onLoadedData={(e) => e.target.pause()}
               muted
-              // poster={videoUrl || "/images/video.png"}
+              poster={videoUrl || "/images/video.png"}
             />
           ) : (
             <div>{isVideo && <Loading />}</div>
