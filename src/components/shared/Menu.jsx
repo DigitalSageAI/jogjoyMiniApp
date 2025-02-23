@@ -180,7 +180,7 @@ function Menu() {
             <>
               <Metric
                 percent={+metrics[0]?.toString().slice(2, 4)}
-                title="Foot strike to center of gravity"
+                title="Точка приземления относительно центра тяжести"
               />
               <Metric
                 blured={
@@ -192,7 +192,7 @@ function Menu() {
                   )
                 }
                 percent={+metrics[1]?.toString().slice(2, 4)}
-                title="Position for foot strike"
+                title="Точка приземления стопы"
               />
               <Metric
                 blured={
@@ -204,7 +204,7 @@ function Menu() {
                   )
                 }
                 percent={+metrics[2]?.toString().slice(2, 4)}
-                title="Upper body movement"
+                title="Работа рук"
               />
               <Metric
                 blured={
@@ -216,7 +216,7 @@ function Menu() {
                   )
                 }
                 percent={+metrics[3]?.toString().slice(2, 4)}
-                title="Trunk tilt angle"
+                title="Наклон корпуса"
               />
             </>
           ) : (
@@ -226,14 +226,7 @@ function Menu() {
               </div>
               <Button
                 className="w-[97%] mt-4"
-                onClick={
-                  subscribe?.sub1 == true ||
-                  subscribe?.sub2 == true ||
-                  subscribe?.sub4 == true ||
-                  videoUrl
-                    ? () => navigate("/analysis")
-                    : () => navigate("/payment")
-                }
+                onClick={() => navigate("/uploading")}
               >
                 Перейти к анализу
               </Button>
@@ -245,8 +238,15 @@ function Menu() {
 
       {/* Модальное окно для воспроизведения видео */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-30">
-          <div className="relative w-[90%] max-w-[600px]">
+        // Фон (оверлей). Клик по нему будет закрывать модалку.
+        <div
+          className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-30"
+          onClick={handleCloseModal} // Закрыть модалку при клике по фону
+        >
+          <div
+            className="relative w-[90%] max-w-[600px]"
+            onClick={(e) => e.stopPropagation()} // Остановить всплытие, чтобы не закрывалось при клике на само видео
+          >
             <video
               src={videoUrl}
               controls

@@ -3,6 +3,9 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import Button from "../ui/Button";
+import dayjs from "dayjs";
+import "dayjs/locale/ru";
+dayjs.locale("ru");
 
 function MenuWorkout() {
   const [isOpen, setIsOpen] = useState(true);
@@ -50,7 +53,11 @@ function MenuWorkout() {
     }
   }, [week, trainingPlan]);
   // Запускать, когда меняются week или trainingPlan
-
+  const getWeekDays = () => {
+    const today = dayjs();
+    return Array.from({ length: 7 }, (_, i) => today.add(i, "day"));
+  };
+  console.log("то что надо", filteredTraining);
   return (
     <div className="w-[340px] bg-gray-900 rounded-lg shadow-lg">
       {/* Заголовок меню */}
@@ -118,8 +125,54 @@ function MenuWorkout() {
                 </div>
               ))}
           </div>
+          {/* 
+          {filteredTraining && (
+            <div className="bg-gray-800 p-4 rounded-b-lg relative">
+              <div className="flex gap-1 overflow-x-hidden">
+                {getWeekDays().map((day, index) => {
+                  const formattedDate = day.format("YYYY-MM-DD");
+                  const isTrainingDay = Object.values(filteredTraining).some(
+                    (week) => {
+                      return Object.values(week).some((training) => {
+                        console.log(
+                          `Сравниваем с тренировкой:`,
+                          training["Дата"]
+                        );
+                        return training["Дата"] === formattedDate;
+                      });
+                    }
+                  );
 
-          <img src="/images/exercices/collaj.png" className="mt-6" alt="" />
+                  console.log(
+                    `Дата ${formattedDate} является тренировочным днем:`,
+                    isTrainingDay
+                  );
+
+                  return (
+                    <div
+                      key={index}
+                      className="flex flex-col p-2 w-[41px] h-[42px] rounded-[5px] cursor-pointer justify-center items-center"
+                      style={{
+                        backgroundColor: index === 0 ? "#333" : "#444",
+                        border: index === 0 ? "1px solid #0BC4ED" : "none",
+                        color: "#fff",
+                      }}
+                    >
+                      <span className="text-[12px]">
+                        {day.format("dd").toUpperCase()}
+                      </span>
+                      <span className="text-[12px]">{day.format("D")}</span>
+                      {isTrainingDay && (
+                        <div className="absolute w-[6px] h-[6px] rounded-[50%] mt-[60px] bg-[#0BC4ED]"></div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )} */}
+
+          {/* <img src="/images/exercices/collaj_1.svg" className="mt-6" alt="" /> */}
           <p className="w-[100%] font-syne text-[15px] text-white font-semibold mt-6">
             Упражнения
           </p>
@@ -128,7 +181,7 @@ function MenuWorkout() {
           {filteredTraining &&
             Object.entries(filteredTraining).map(([day, details], idx) => (
               <div
-                onClick={() => navigate("/results")}
+                onClick={() => {navigate("/trainingPage"); localStorage.setItem('day', details["Дата"])}}
                 key={idx}
                 className="w-[100%] min-h-[69px] flex flex-row justify-start items-start rounded-[10px] mt-2"
                 style={{ border: "1px solid #606060" }}
@@ -171,15 +224,14 @@ function MenuWorkout() {
           <Button
             className="mt-2 w-[320px]"
             onClick={
-              subscribe?.sub3 ||
-              subscribe?.sub1 ||
-              subscribe?.sub2 ||
-              subscribe?.sub4
-                ? () => navigate("/prompt")
-                : () => navigate("/payment")
+              filteredTraining && filteredTraining.length >= 1
+                ? () => navigate("/newMain")
+                : () => navigate("/prompt")
             }
           >
-            Получить план тренировки
+            {filteredTraining && filteredTraining.length >= 1
+              ? "Перейти к тренировке"
+              : "Получить план тренировки"}
           </Button>
           {/* )} */}
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import Button from "../components/ui/Button";
 import Loading from "../components/ui/Loading";
@@ -8,49 +8,79 @@ function Prompt() {
   const [level, setLevel] = useState("начинающий");
   const [currentTime, setCurrentTime] = useState("58");
   const [targetTime, setTargetTime] = useState("55");
-
   const [weeklyTrainings, setWeeklyTrainings] = useState("3");
-  const [marathonDistance, setMarathonDistance] = useState("10"); // Дистанция марафона
-  const [timeLeft, setTimeLeft] = useState("1 неделя"); // Сколько месяцев осталось
+  const [marathonDistance, setMarathonDistance] = useState("10");
+  const [timeLeft, setTimeLeft] = useState("1 неделя");
+  const [startDate, setStartDate] = useState(""); // Дата начала тренировок
   const [error, setError] = useState("");
-  const [generatedPrompt, setGeneratedPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [subscribe, setSubscribe] = useState();
+  const [trainingPlan, setTrainingPlan] = useState([]);
   const id = localStorage.getItem("id");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    axios
+      .get(`/getUserById/${id}`)
+      .then((res) => res.data)
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setSubscribe({
+            sub1: data.sub1,
+            sub2: data.sub2,
+            sub3: data.sub3,
+            sub4: data.sub4,
+          });
+          setTrainingPlan(data?.trainingPlan);
+        }
+      })
+      .catch((err) => alert("Не удалось авторизоваться"));
+  }, [id]);
+
   const handleGeneratePrompt = async () => {
+    if (
+      !subscribe?.sub3 &&
+      !subscribe?.sub1 &&
+      !subscribe?.sub2 &&
+      !subscribe?.sub4
+    ) {
+      navigate("/payment");
+      return;
+    }
     if (
       !level ||
       !currentTime ||
       !targetTime ||
       !weeklyTrainings ||
       !marathonDistance ||
-      !timeLeft
+      !timeLeft ||
+      !startDate
     ) {
       setError("Все поля должны быть заполнены.");
       return;
     }
 
     const prompt = `Сгенерируй тренировочную программу для подготовки к забегу на ${marathonDistance} км за ${timeLeft}. Исходные данные: уровень ${level}, текущий результат ${currentTime} минут, целевой результат ${targetTime} минут. 
-В тренировочную программу включи:
-- СБУ 2 раза в неделю после бега.
-- 1 раз в две недели анализ техники бега.
-Разовый объем тренировок не должен превышать 80% от ${marathonDistance} км. Количество тренировок в неделю - ${weeklyTrainings}.
-Ответ верни в формате JSON (без строк) который я тебе приведу, твоя задача прописать каждую неделю, без лишних слов которые не касаются тренировки:
-[
-  {
-    week1: {
-      "Понедельник": { 
-        "Дата": "03.02.2025"
-        "Тип тренировки": "", 
-        "Дистанция": "", 
-        "Заметки": "",
-        "СБУ": true
-      },
+  В тренировочную программу включи:
+  - СБУ 2 раза в неделю после бега.
+  - 1 раз в две недели анализ техники бега.
+  Разовый объем тренировок не должен превышать 80% от ${marathonDistance} км. Количество тренировок в неделю - ${weeklyTrainings}.
+  Дата начала тренировок: ${startDate}.
+  Ответ верни в **валидном JSON-формате**:
+  [
+    {
+      "week1": {
+        "Понедельник": { 
+          "Дата": "${startDate}",
+          "Тип тренировки": "", 
+          "Дистанция": "", 
+          "Заметки": "",
+          "СБУ": true
+        }
+      }
     }
-  }
-];
-`;
+  ]`;
 
     try {
       if (id) {
@@ -60,38 +90,36 @@ function Prompt() {
 
         console.log("Сырой ответ OpenAI:", data);
 
-        // Убираем лишние кавычки, если ответ пришел в виде строки
+        // Очистка данных от лишних символов
         if (typeof data === "string") {
-          data = data.replace(/^"|"$/g, ""); // Убираем начальные и конечные кавычки
+          data = data.replace(/```json|```/g, "").trim(); // Удаляем `json` и ```
         }
 
+        // Парсим JSON
         const parsedData = JSON.parse(data);
         console.log("Парсинг JSON успешен:", parsedData);
 
-        setGeneratedPrompt(parsedData);
+        setTrainingPlan(parsedData);
 
         axios
           .post("/saveTraining", {
             userId: id,
             trainingPlan: parsedData,
           })
-          .then((res) => res.data)
-          .then((data) => {
-            if (data) {
-              axios
-                .post("/subscribe", {
-                  type: ["sub3", "sub4"],
-                  id,
-                  val: false,
-                })
-                .then((res) => res.data)
-                .then((data) => console.log("Успешно прошла оплата"))
-                .catch((err) => console.log("Не удалось произвести оплату"));
-              setLoading(false);
-              navigate("/main");
-            }
+          .then(() => {
+            axios
+              .post("/subscribe", {
+                type: ["sub3", "sub4"],
+                id,
+                val: false,
+              })
+              .then(() => console.log("Успешно прошла оплата"))
+              .catch(() => console.log("Не удалось произвести оплату"));
+
+            setLoading(false);
+            navigate("/main");
           })
-          .catch((err) => {
+          .catch(() => {
             alert("Не удалось сохранить данные");
             setLoading(false);
           });
@@ -119,6 +147,7 @@ function Prompt() {
       <h1 className="text-xl font-bold mb-4 text-white">
         Создание тренировочной программы
       </h1>
+
       <div className="mb-4">
         <label className="block mb-2 text-white">Уровень</label>
         <select
@@ -137,6 +166,7 @@ function Prompt() {
           <option value="продвинутый">Продвинутый</option>
         </select>
       </div>
+
       <div className="mb-4">
         <label className="block mb-2 text-white">Дистанция забега (км)</label>
         <input
@@ -152,6 +182,7 @@ function Prompt() {
           }}
         />
       </div>
+
       <div className="mb-4">
         <label className="block mb-2 text-white">
           Текущий результат (минуты)
@@ -169,6 +200,7 @@ function Prompt() {
           }}
         />
       </div>
+
       <div className="mb-4">
         <label className="block mb-2 text-white">
           Целевой результат (минуты)
@@ -186,6 +218,23 @@ function Prompt() {
           }}
         />
       </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 text-white">Дата начала тренировок</label>
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="border p-2 w-full"
+          style={{
+            background: "none",
+            borderRadius: "5px",
+            color: "white",
+            outline: "none",
+          }}
+        />
+      </div>
+
       <div className="mb-4">
         <label className="block mb-2 text-white">
           Сколько времени осталось до забега
@@ -207,34 +256,11 @@ function Prompt() {
           <option value="1 месяц">1 месяц</option>
           <option value="2 месяца">2 месяца</option>
           <option value="3 месяца">3 месяца</option>
-          <option value="4 месяца">4 месяца</option>
         </select>
       </div>
-      <div className="mb-4">
-        <label className="block mb-2 text-white">
-          Количество тренировок в неделю
-        </label>
-        <input
-          type="number"
-          value={weeklyTrainings}
-          onChange={(e) => setWeeklyTrainings(e.target.value)}
-          className="border p-2 w-full"
-          style={{
-            background: "none",
-            borderRadius: "5px",
-            color: "white",
-            outline: "none",
-          }}
-        />
-      </div>
+
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <Button onClick={handleGeneratePrompt}>Получить план</Button>
-      {/* {generatedPrompt && (
-        <div className="mt-4 p-4 bg-gray-100 border">
-          <h2 className="font-bold mb-2">Сгенерированный план:</h2>
-          <pre className="whitespace-pre-wrap text-white">{generatedPrompt}</pre>
-        </div>
-      )} */}
     </div>
   );
 }

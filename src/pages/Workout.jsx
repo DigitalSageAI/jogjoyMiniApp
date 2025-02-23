@@ -4,17 +4,19 @@ import Button from "../components/ui/Button";
 import Loading from "../components/ui/Loading";
 import { useNavigate } from "react-router-dom";
 import WorkoutCalendar from "../components/shared/WorkoutCalendar/WorkoutCalendar";
+
 function Workout() {
   const id = localStorage.getItem("id");
   const [subscribe, setSubscribe] = useState(null);
   const [trainingPlan, setTrainingPlan] = useState();
   const [countTrainings, setCountTrainings] = useState("");
   const [countWeek, setCountWeek] = useState("");
+  const [completedTrainings, setCompletedTrainings] = useState()
   const navigate = useNavigate();
 
   const countOuterKeys = (trainingPlan) => {
     if (!trainingPlan || typeof trainingPlan !== "object") {
-      return 0; // или другое значение по умолчанию
+      return 0;
     }
     return Object.keys(trainingPlan).length;
   };
@@ -32,6 +34,8 @@ function Workout() {
             sub4: data.sub4,
           });
           setTrainingPlan(data.trainingPlan);
+          setCompletedTrainings(data?.completedTrainings)
+
           const totalKeys = countOuterKeys(data.trainingPlan);
           setCountWeek(totalKeys);
           const totalTrainings = countOuterKeys(data.trainingPlan[0]?.week1);
@@ -39,14 +43,14 @@ function Workout() {
         }
       });
   }, []);
-  console.log(subscribe?.sub1);
+
+  // Проверка, есть ли хотя бы одна активная подписка
+  const hasActiveSubscription =
+    subscribe?.sub1 || subscribe?.sub2 || subscribe?.sub3 || subscribe?.sub4;
 
   return (
     <>
-      {subscribe?.sub1 != true ||
-      subscribe?.sub2 != true ||
-      subscribe?.sub3 != true ||
-      subscribe?.sub4 != true ? (
+      {!hasActiveSubscription ? (
         <div className="flex flex-col justify-start items-center relative h-[100%]">
           <p className="font-syne font-semibold text-white text-[17px] mt-4">
             Программа тренировок
@@ -90,8 +94,7 @@ function Workout() {
               </p>
             </div>
           </div>
-          {/* <p className='text-[14px] font-sans font-semibold mt-[22px] w-[343px] text-left' style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Выберите дни тренировок, нажав на дату</p> */}
-          <WorkoutCalendar trainingPlan={trainingPlan}></WorkoutCalendar>
+          <WorkoutCalendar completedTrainings={completedTrainings} trainingPlan={trainingPlan}></WorkoutCalendar>
           <Button
             onClick={() => navigate("/main")}
             className="absolute bottom-3"

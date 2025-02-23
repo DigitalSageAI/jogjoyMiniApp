@@ -1,22 +1,73 @@
 .highlight {
-    background-color: #0bc4ed;
-    color: white;
-    border-radius: 5px;
-    padding-left: 4px;
-    padding-right: 4px;
+  background-color: #0bc4ed;
+  color: white;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
+.completed {
+  background-color: #4caf50 !important; /* Зеленый для выполненных тренировок */
+  color: white !important;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.missed {
+  background-color: #f44336 !important; /* Красный для пропущенных тренировок */
+  color: white !important;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+/* День прошёл + тренировка не выполнена (красная подсветка) */
+.past-not-completed {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+/* День прошёл + тренировка выполнена (зелёная подсветка) */
+.past-completed {
+  background-color: rgba(0, 128, 0, 0.2);
+  color: green;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+/* Будущее/сегодня + есть тренировка (например, синий) */
+.upcoming-training-day {
+  background-color: rgba(0, 0, 255, 0.2);
+  color: #0000ff;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.future-training {
+  background-color: #0bc4ed;
+  color: white;
+  border-radius: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
 
 .react-calendar__tile--now {
-    background: none;
-    color: black;
+  background: none;
+  color: black;
 }
 
 .react-calendar__navigation__label {
-    pointer-events: none
-    
+  pointer-events: none;
 }
 
-.react-calendar__navigation__prev2-button, .react-calendar__navigation__next2-button {
-    display: none
+.react-calendar__navigation__prev2-button,
+.react-calendar__navigation__next2-button {
+  display: none;
 }

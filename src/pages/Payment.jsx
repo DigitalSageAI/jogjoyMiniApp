@@ -16,8 +16,9 @@ function Payment() {
   useEffect(() => {
     const success = searchParams.get("Success") === "true";
     const errorCode = searchParams.get("ErrorCode");
+    console.log(success);
 
-    if (success && errorCode === "0") {
+    if (success) {
       const type = localStorage.getItem("type"); // Достаем сохраненный тариф
 
       if (type && id) {
