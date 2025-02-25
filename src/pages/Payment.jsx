@@ -14,6 +14,13 @@ function Payment() {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    const selectedTarif = localStorage.getItem("selectedTarif");
+    if (selectedTarif && selectedTarif == "clubMembership") {
+      setSelected("clubMembership");
+      setTarif("3 year");
+
+      localStorage.removeItem("selectedTarif");
+    }
     const success = searchParams.get("Success") === "true";
     const errorCode = searchParams.get("ErrorCode");
     console.log(success);
@@ -29,7 +36,7 @@ function Payment() {
             val: true,
           })
           .then(() => {
-            alert("Успешно прошла оплата");
+            // alert("Успешно прошла оплата");
             localStorage.removeItem("type"); // Удаляем type после оформления
 
             navigate("/main");
@@ -206,7 +213,7 @@ function Payment() {
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
               <p className="font-sans text-white text-[13px] opacity-70">
-                Удобно для тех, кто
+                Удобно для тех, кто серьёзно относится
               </p>
             </div>
             {/* Кнопка "Подробнее" */}
@@ -214,8 +221,8 @@ function Payment() {
             {expandedCards["1 year"] && (
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
-                  серьёзно относится к работе над техникой и планирует
-                  совершенствовать её на постоянной основе.
+                  к работе над техникой и планирует совершенствовать её на
+                  постоянной основе.
                 </p>
               </div>
             )}
@@ -250,7 +257,7 @@ function Payment() {
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
               <p className="font-sans text-white text-[13px] opacity-70">
-                Программа разрабатывается
+                Программа разрабатывается исходя
               </p>
             </div>
             {/* Кнопка "Подробнее" */}
@@ -258,8 +265,8 @@ function Payment() {
             {expandedCards["3 month"] && (
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
-                  исходя из текущего состояния спортсмена, сроков проведения
-                  забега целей на забег.
+                  из текущего состояния спортсмена, сроков проведения забега
+                  целей на забег.
                 </p>
               </div>
             )}

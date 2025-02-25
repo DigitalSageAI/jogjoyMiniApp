@@ -3,14 +3,25 @@ import { useNavigate } from "react-router-dom";
 import axios from "../axios";
 import Loading from "../components/ui/Loading";
 import Button from "../components/ui/Button";
+import { details } from "framer-motion/client";
 
 function TrainingPage() {
   const navigate = useNavigate();
   const [text, setText] = useState();
   const [loading, setLoading] = useState(false);
+  const [buttonContent, setButtonContent] = useState("Начать");
+  const [sbu, setSbu] = useState(false);
+  const [details1, setDetails1] = useState();
 
   useEffect(() => {
     const id = localStorage.getItem("id");
+    const details = JSON.parse(localStorage.getItem("details"));
+    setDetails1(details);
+
+    if (details["СБУ"] == true || details["SБУ"] == true) {
+      setSbu(true);
+    }
+    console.log("details", details);
     setLoading(true);
     axios
       .get(`/getUserById/${id}`)
@@ -57,7 +68,7 @@ function TrainingPage() {
       .then((res) => res.data)
       .then((data) => {
         if (data) {
-          alert("Вы начали тренировку");
+          setButtonContent("Выполнено");
         }
       })
       .catch((err) => {
@@ -94,10 +105,30 @@ function TrainingPage() {
           <p className="text-white font-sans text-[13px]">Средняя</p>
         </div>
       </div>
-      <p className="mt-[17px] text-[17px] font-sans text-white font-semibold w-[90%]">
-        Упражнения
-      </p>
-      {text?.exercises &&
+
+      {details1 && (
+        <div className="flex flex-col justify-start items-start w-[100%] gap-[3px] mt-2">
+          <p
+            className="font-sans ml-[22px] text-[14px] text-white font-medium w-[225px]"
+            style={{ lineHeight: "120%" }}
+          >
+            {details1["Тип тренировки"]} -- {details1["Дистанция"]}
+          </p>
+          <p
+            className="font-sans ml-[22px] text-[12px] text-white opacity-60 font-medium w-[305px]"
+            style={{ lineHeight: "120%" }}
+          >
+            {details1["Заметки"]}
+          </p>
+        </div>
+      )}
+      {sbu && (
+        <p className="mt-[17px] text-[17px] font-sans text-white font-semibold w-[90%]">
+          Упражнения
+        </p>
+      )}
+      {sbu &&
+        text?.exercises &&
         Object.entries(text.exercises).map(([key, value]) => {
           if (key === "exercise_head") return null; // Пропускаем заголовки
 
@@ -151,7 +182,7 @@ function TrainingPage() {
           );
         })}
       <Button onClick={addTraining} className="mt-4 mb-3">
-        Начать
+        {buttonContent}
       </Button>
     </div>
   );

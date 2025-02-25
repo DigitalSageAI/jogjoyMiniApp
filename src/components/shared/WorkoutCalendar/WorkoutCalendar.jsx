@@ -55,18 +55,12 @@ const WorkoutCalendar = ({ trainingPlan, completedTrainings }) => {
     const isCompleted = completedTrainings.includes(dateString);
 
     // Логика подсветки
-    if (date < now) {
-      // Прошло
-      if (isCompleted) {
-        return "past-completed"; // зелёный
-      } else {
-        return "past-not-completed"; // красный
-      }
+    if (isCompleted) {
+      return "past-completed"; // зелёный
+    } else if (date < now) {
+      return "past-not-completed"; // красный
     } else {
-      // Сегодня или будущее
-      // При желании можно тоже подсветить
-      // return "future-training";
-      return "future-training";
+      return "future-training"; // синий
     }
   };
 

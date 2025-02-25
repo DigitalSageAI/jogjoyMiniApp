@@ -181,7 +181,11 @@ function MenuWorkout() {
           {filteredTraining &&
             Object.entries(filteredTraining).map(([day, details], idx) => (
               <div
-                onClick={() => {navigate("/trainingPage"); localStorage.setItem('day', details["Дата"])}}
+                onClick={() => {
+                  navigate("/trainingPage");
+                  localStorage.setItem("day", details["Дата"]);
+                  localStorage.setItem("details", JSON.stringify(details));
+                }}
                 key={idx}
                 className="w-[100%] min-h-[69px] flex flex-row justify-start items-start rounded-[10px] mt-2"
                 style={{ border: "1px solid #606060" }}

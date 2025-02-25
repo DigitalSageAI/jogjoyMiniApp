@@ -13,7 +13,7 @@ function Results() {
       .then((res) => res.data)
       .then((data) => {
         if (data.analysis?.videoUrl) {
-          const resultsApiUrl = `https://ai.jogjoy.run/apik/metrics/${data.analysis.videoUrl}?lang=en`;
+          const resultsApiUrl = `https://ai.jogjoy.run/apik/metrics/${data.analysis.videoUrl}?lang=ru`;
           fetch(resultsApiUrl, {
             method: "GET",
             headers: {

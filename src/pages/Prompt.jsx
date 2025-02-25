@@ -45,6 +45,7 @@ function Prompt() {
       !subscribe?.sub2 &&
       !subscribe?.sub4
     ) {
+      localStorage.setItem("selectedTarif", "clubMembership");
       navigate("/payment");
       return;
     }
@@ -225,6 +226,24 @@ function Prompt() {
           type="date"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
+          className="border p-2 w-full"
+          style={{
+            background: "none",
+            borderRadius: "5px",
+            color: "white",
+            outline: "none",
+          }}
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 text-white">
+          Количество тренировок в неделю
+        </label>
+        <input
+          type="number"
+          value={weeklyTrainings}
+          onChange={(e) => setWeeklyTrainings(e.target.value)}
           className="border p-2 w-full"
           style={{
             background: "none",

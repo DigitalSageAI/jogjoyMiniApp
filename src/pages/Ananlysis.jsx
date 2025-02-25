@@ -152,10 +152,10 @@ function Analysis() {
                 percent={+metric?.toString().slice(2, 4)}
                 title={
                   [
-                    "Удар ногой к центру тяжести",
-                    "Положение для удара ногой",
-                    "Движение верхней части тела",
-                    "Угол наклона ствола",
+                    "Точка приземления относительно центра тяжести",
+                    "Точка приземления стопы",
+                    "Работа рук",
+                    "Наклон корпуса",
                   ][index]
                 }
                 blured={
@@ -240,9 +240,9 @@ function Analysis() {
             if (metrics == null) {
               navigate("/uploading");
             } else if (
-              subscribe?.sub1 === true ||
-              subscribe?.sub2 === true ||
-              subscribe?.sub4 === true ||
+              (subscribe?.sub1 === true ||
+                subscribe?.sub2 === true ||
+                subscribe?.sub4 === true) &&
               videoUrl
             ) {
               navigate("/results");

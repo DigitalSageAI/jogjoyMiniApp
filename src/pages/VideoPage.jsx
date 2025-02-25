@@ -18,7 +18,7 @@ function VideoPage() {
     };
   return (
     <div className='flex flex-col justify-start items-center w-[100%]'>
-        <p className='mt-[11px] text-[17px] font-syne text-white'>Анализ</p>
+        <p className='mt-[11px] text-[17px] font-syne text-white'>Инструкция по снятию видео для анализа=</p>
         <p className='w-[90%] text-left font-sans text-[15px] text-white mt-[19px]'>Выполнение этих несложных требований ускорит получение результатов и повысит качество анализа.</p>
         <div className='mt-2 gap-1 flex justify-start items-start w-[90%]' style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             <span>1.</span>
@@ -26,7 +26,7 @@ function VideoPage() {
         </div>
         <div className='mt-2 gap-1 flex justify-start items-start w-[90%]' style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             <span>2.</span>
-            <p>Примерно в 7 метрах от бегуна (видны голова и пальцы ног)</p>
+            <p>Примерно в 7 метрах от бегуна (видны голова и точка приземления стопы)</p>
         </div>
         <div className='mt-2 gap-1 flex justify-start items-start w-[90%]' style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
             <span>3.</span>
