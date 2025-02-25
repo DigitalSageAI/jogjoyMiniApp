@@ -52,8 +52,8 @@ function App() {
           <Route path="/cabinet" element={<Cabinet />} />
           <Route path="/results" element={<Results />} />
           <Route path="/prompt" element={<Prompt />} />
-          <Route path="/admin" element={<Admin />} />
         </Route>
+        <Route path="/admin" element={<Admin />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/" element={<StartPage />} index />
         <Route path="/signIn" element={<SignIn />} />

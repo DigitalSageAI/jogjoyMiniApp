@@ -169,7 +169,7 @@ function Analysis() {
               />
             ))
           ) : (
-            <div className="flex flex-col justify-start items-center h-[300px] mt-[200px] bg-red-400">
+            <div className="flex flex-col justify-start items-center h-[300px] ">
               <div className="flex flex-col justify-start items-center text-white">
                 Здесь пишется история… <br /> Вы еще не проводили анализ техники
                 бега, а чтобы получить свой первый разбор техники бега,
