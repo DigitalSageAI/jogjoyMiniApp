@@ -98,7 +98,7 @@ function Analysis() {
       })
       .catch(() => {
         setError(true);
-        alert("Ваше видео снято не верно либо оно еще в обработке");
+        alert("Ваше видео еще в обработке");
       })
       .finally(() => setLoading(false));
   }, []);
@@ -126,20 +126,20 @@ function Analysis() {
       <div
         className={`mb-[15px] bg-[#303032] rounded-[8px] w-[100%] ${
           isVideo
-            ? "flex flex-col justify-start mt-[15px] h-[386px]"
+            ? "flex flex-col justify-start mt-[15px] h-[426px]"
             : "w-[95%] h-[241px]"
         } flex flex-col justify-start mt-[15px]`}
       >
         {isVideo && !metrics != null && (
           <p className="flex justify-between text-[13px] text-white mt-[13px] w-[90%] ml-[16px]">
-            12.05.2023
+            01.02.2025
             {/* <span className="text-[#0a84ff] cursor-pointer">View</span> */}
           </p>
         )}
         <div
           className={`flex ${
             !isVideo && "flex-col"
-          } justify-start items-center gap-2 mt-2 mb-1 ml-[10px] w-[95%] overflow-x-scroll overflow-y-hidden pb-3 min-h-[110px]`}
+          } justify-start flex-wrap items-center  mt-2 mb-1 ml-[10px] w-[95%] overflow-x-scroll overflow-y-hidden pb-3 min-h-[110px] gap-1`}
         >
           {(subscribe?.sub1 == true ||
             subscribe?.sub2 == true ||
@@ -162,8 +162,8 @@ function Analysis() {
                   !(
                     subscribe?.sub1 == true ||
                     subscribe?.sub2 == true ||
-                    subscribe?.sub4 == true ||
-                    videoUrl
+                    subscribe?.sub4 == true 
+                    // videoUrl
                   ) && index > 0
                 }
               />

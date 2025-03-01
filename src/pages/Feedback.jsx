@@ -1,24 +1,70 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Input from '../components/ui/Input'
-import Button from '../components/ui/Button'
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Input from "../components/ui/Input";
+import Button from "../components/ui/Button";
+import axios from "../axios";
 function Feedback() {
+  const id = localStorage.getItem("id");
 
-    const navigate = useNavigate()
-    const [email, setEmail] = useState("")
-    const [message, setMessage] = useState("")
-
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    axios.get(`/getUserById/${id}`).then((res) => {
+      if (res.data) {
+        console.log(res.data);
+        setEmail(res.data.name);
+      }
+    });
+  }, []);
   return (
-    <div className='flex flex-col justify-start items-center w-[100%] h-[100%]' style={{ background: "#101010" }}>
-        <img onClick={() => navigate(-1)} src="/icons/Left Arrow Button.svg" className='absolute left-4 mt-[11px]' alt="" />
-        <p className="mt-[11px] text-[17px] font-syne text-white font-semibold ">Feedback</p>
-        <p className='font-sans font-semibold text-[15px] text-white mt-[19px] w-[90%] text-left' style={{ opacity: ".6" }}>Your email</p>
-        <Input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2" placeholder={'Email Address'}></Input>
-        <p className='font-sans font-semibold text-[15px] text-white mt-[24px] w-[90%] text-left' style={{ opacity: ".6" }}>Your feedback</p>
-        <textarea value={message} style={{background: "rgba(118, 118, 128, 0.24)", color: 'white', border: '1px solid rgba(84, 84, 88, 0.65)'}} onChange={(e) => setMessage(e.target.value)} className="rounded-[8px] pt-3 w-[342px] focus:outline-none px-[17px] placeholder:text-middleGray mt-2 h-[400px] align-top text-start" placeholder={'Write your feedback here'}></textarea>
-        <Button className="mt-[23px] mb-[12px]">Send</Button>
+    <div
+      className="flex flex-col justify-start items-center w-[100%] h-[100%]"
+      style={{ background: "#101010" }}
+    >
+      <img
+        onClick={() => navigate(-1)}
+        src="/icons/Left Arrow Button.svg"
+        className="absolute left-4 mt-[11px]"
+        alt=""
+      />
+      <p className="mt-[11px] text-[17px] font-syne text-white font-semibold ">
+        Отзыв
+      </p>
+      <p
+        className="font-sans font-semibold text-[15px] text-white mt-[19px] w-[90%] text-left"
+        style={{ opacity: ".6" }}
+      >
+        Ваш телеграм
+      </p>
+      <Input
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="mt-2"
+        placeholder={"Email Address"}
+      ></Input>
+      <p
+        className="font-sans font-semibold text-[15px] text-white mt-[24px] w-[90%] text-left"
+        style={{ opacity: ".6" }}
+      >
+        Ваш отзыв
+      </p>
+      <textarea
+        value={message}
+        style={{
+          background: "rgba(118, 118, 128, 0.24)",
+          color: "white",
+          border: "1px solid rgba(84, 84, 88, 0.65)",
+        }}
+        onChange={(e) => setMessage(e.target.value)}
+        className="rounded-[8px] pt-3 w-[342px] focus:outline-none px-[17px] placeholder:text-middleGray mt-2 h-[400px] align-top text-start"
+        placeholder={"Напишите свой отзыв сюда"}
+      ></textarea>
+      <Button className="mt-[23px] mb-[12px]" onClick={() => navigate(-1)}>
+        Отправить
+      </Button>
     </div>
-  )
+  );
 }
 
-export default Feedback
+export default Feedback;

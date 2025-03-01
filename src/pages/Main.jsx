@@ -33,7 +33,7 @@ function Main() {
         </div>
 
         <div className="font-syne text-white font-semibold text-[15px] w-[340px] mb-[24px] text-left">
-          Вы желаете подготовится к забегу или проанализировать свою технику?
+          Вы желаете подготовиться к забегу или проанализировать свою технику?
         </div>
 
         <MenuWorkout />

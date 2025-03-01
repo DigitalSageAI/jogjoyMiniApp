@@ -82,18 +82,6 @@ function Uploading() {
             }
           });
       }
-
-      // const blob = await response.blob();
-
-      // const videoUrl = URL.createObjectURL(blob);
-      // console.log(videoUrl, 'videoUrl');
-
-      // const a = document.createElement("a");
-      // a.href = videoUrl;
-      // a.download = "video.mov";
-      // document.body.appendChild(a);
-      // a.click();
-      // document.body.removeChild(a);
     } catch (error) {
       console.error("Ошибка при загрузке видео:", error);
     } finally {

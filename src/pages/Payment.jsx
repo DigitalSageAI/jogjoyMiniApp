@@ -39,7 +39,7 @@ function Payment() {
             // alert("Успешно прошла оплата");
             localStorage.removeItem("type"); // Удаляем type после оформления
 
-            navigate("/main");
+            navigate(-1);
           })
           .catch(() => alert("Не удалось произвести оплату"));
       }
@@ -208,12 +208,12 @@ function Payment() {
               alt=""
             />
             <p className="font-sans font-semibold text-white text-[13px]">
-              Купить безлимитное количество расширенных анализ техники бега и
+              Купить безлимитное количество расширенных анализов техники бега и
               программ тренировок на 12 месяцев
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
               <p className="font-sans text-white text-[13px] opacity-70">
-                Удобно для тех, кто серьёзно относится
+                Удобно для тех,
               </p>
             </div>
             {/* Кнопка "Подробнее" */}
@@ -221,8 +221,8 @@ function Payment() {
             {expandedCards["1 year"] && (
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
-                  к работе над техникой и планирует совершенствовать её на
-                  постоянной основе.
+                  кто серьёзно относится к работе над техникой и планирует
+                  совершенствовать её на постоянной основе.
                 </p>
               </div>
             )}
@@ -266,7 +266,7 @@ function Payment() {
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
                   из текущего состояния спортсмена, сроков проведения забега
-                  целей на забег.
+                  целей на забег. Анализ техники бега не включен в стоимость.
                 </p>
               </div>
             )}
@@ -307,7 +307,7 @@ function Payment() {
             {expandedCards["3 year"] && (
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
-                  кто хочет подготовится к забегу максимально эффективно и
+                  кто хочет подготовиться к забегу максимально эффективно и
                   снизить риск получения травмы. Проведение регулярных анализов
                   техники бега и персонализированные комплексы специальных
                   беговых упражнений уже включены в стоимость

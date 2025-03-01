@@ -16,6 +16,7 @@ function StartPage() {
 
         if (userData) {
           const userObj = JSON.parse(decodeURIComponent(userData));
+          console.log(userObj);
 
           if (!userObj.id) {
             alert("Не удалось получить Telegram ID");
@@ -23,7 +24,11 @@ function StartPage() {
           }
 
           axios
-            .post("/getTelegramId", { initData: userObj.id })
+            .post("/getTelegramId", {
+              initData: userObj.id,
+              img: userObj.photo_url,
+              name: userObj.username,
+            })
             .then((response) => {
               if (response.data?.user?._id) {
                 localStorage.setItem("id", response.data.user._id);

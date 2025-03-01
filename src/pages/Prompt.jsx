@@ -10,7 +10,7 @@ function Prompt() {
   const [targetTime, setTargetTime] = useState("55");
   const [weeklyTrainings, setWeeklyTrainings] = useState("3");
   const [marathonDistance, setMarathonDistance] = useState("10");
-  const [timeLeft, setTimeLeft] = useState("1 неделя");
+  const [timeLeft, setTimeLeft] = useState("3 недели");
   const [startDate, setStartDate] = useState(""); // Дата начала тренировок
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -269,8 +269,8 @@ function Prompt() {
             outline: "none",
           }}
         >
-          <option value="1 неделя">1 неделя</option>
-          <option value="2 недели">2 недели</option>
+          {/* <option value="1 неделя">1 неделя</option>
+          <option value="2 недели">2 недели</option> */}
           <option value="3 недели">3 недели</option>
           <option value="1 месяц">1 месяц</option>
           <option value="2 месяца">2 месяца</option>

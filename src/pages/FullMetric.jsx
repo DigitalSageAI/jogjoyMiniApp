@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../axios";
 import Loading from "../components/ui/Loading";
+import html2canvas from "html2canvas";
 import Button from "../components/ui/Button";
 
 function FullMetric() {
@@ -55,6 +56,74 @@ function FullMetric() {
     setIsModalOpen(false); // Закрыть модальное окно
   };
 
+  const getTextByTitleAndPercent = (title, percent) => {
+    switch (title) {
+      case "Точка приземления относительно центра тяжести":
+        if (percent >= 70) {
+          return "Ты приземляешься на среднюю часть стопы, это помогает тебе бежать эффективно и поддерживать крейсерскую скорость. \n\n\n\n Ты приземляешься на среднюю часть стопы, это помогает тебе бежать эффективно и поддерживать крейсерскую скорость.";
+        } else if (percent >= 30) {
+          return "Ты приземляешься на носок, это приводит к перегрузке твоих икроножных мышц, они медленнее восстанавливаются и твой прогресс в беге замедляется.";
+        } else {
+          return "Ты приземляешься на пятку, а нужно – на среднюю часть стопы. Приземление на пятку создает повышенную нагрузку на твои колени и позвоночник, постепенно изнашивая суставы в них, и, конечно, это приводит к серьезным травмам! Что делать? Я дам тебе индивидуальный список специальных беговых упражнений, которые помогут тебе не получить эти травмы.";
+        }
+
+      case "Точка приземления стопы":
+        if (percent >= 70) {
+          return "Твоя стопа в момент приземления под твоим центром тяжести. И так и нужно! Это помогает тебе бегать эффективно. Но даже в этом случае, нужно поддерживать и укреплять мышцы, выполяняя комплекс специальных беговых упражнений.";
+        } else if (percent >= 30) {
+          return "Твоя стопа в момент приземления перед твоим центром тяжести, а должна быть - ровно под ним. Получается, что ты 'натыкаешься' на свою ногу, это создает повышенную нагрузку не только на колени, но и на мышцы, потому что поддержание скорости требует от тебя дополнительных усилий. Как итог: медленное восстановление, а значит двигательный аппарат копит в себе усталость, как снежный ком, и когда ком станет лавиной, это обязательно приведет к травмам. Давай поработаем над этим вместе? Ниже я дам комплекс упражнений, которые помогут приземляться в нужный момент.";
+        } else {
+          return "Твоя стопа в момент приземления перед твоим центром тяжести, а должна быть - ровно под ним. Получается, что ты 'натыкаешься' на свою ногу, это создает повышенную нагрузку не только на колени, но и на мышцы, потому что поддержание скорости требует от тебя дополнительных усилий. Как итог: медленное восстановление, а значит двигательный аппарат копит в себе усталость, как снежный ком, и когда ком станет лавиной, это обязательно приведет к травмам. Давай поработаем над этим вместе? Ниже я дам комплекс упражнений, которые помогут приземляться в нужный момент.";
+        }
+
+      case "Работа рук":
+        if (percent >= 70) {
+          return "Твой корпус во время бега стабилен (не вращается вокруг своей оси), а руки активно работают! Получается, ты уже побегал с палочками для суши? Эх, а это было мое топ-упражнение... Ну, ничего, у меня есть список упражнений и для таких профи, как ты ;)";
+        } else if (percent >= 30) {
+          return "Твой корпус во время бега стабилен (не вращается вокруг своей оси), но руками нужно всё-же шевелить активнее :-) Активнее руки - эффективнее бег. Не страшно, я дам тебе упражнения для работы над этим, только обещай делать их, потому что это know-how, must have и просто топ-упражнения.";
+        } else {
+          return "Твой корпус во время движения вращается вокруг своей оси, а руки - нет (ну, или почти нет)! Давай наоборот? Корпус должен быть стабилен (ну, ок, почти стабилен, ты же все-таки бежишь), а руки должны активно работать. Активнее руки - эффективнее бег. Не страшно, я дам тебе упражнения для работы над этим, только обещай делать их, потому что это know-how, must have и просто топ-упражнения.";
+        }
+
+      case "Наклон корпуса":
+        if (percent >= 70) {
+          return "Твой корпус во время бега наклонен вперед, и это замечательно: ты используешь инерцию, поэтому мышцы ног работают на поддержание скорости, а не поддержку туловища. Но даже в этом случае нужно поддерживать и развивать мышцы корпуса. В этом тебе могут помочь специальные беговые упражнения из комплекса, который я бережно для тебя собрал.";
+        } else if (percent >= 30) {
+          return "Твой корпус во время бега расположен вертикально. Бывает и хуже, но лучше бегать с небольшим наклоном вперед: так ты сможешь задействовать силу инерции, а это позволит тебе бежать быстрее, или просто меньше напрягать мышцы, а значит, развиваться быстрее. У меня есть упражнения для работы над этим, только обещай их делать! Ниже поделюсь.";
+        } else {
+          return "О_о, как это ты так делаешь? Твое тело отклонено назад! То есть ноги тянут твое тело вперед, поэтому они сильно перегружены!!! Срочно зовите санитаров! Шучу, мы справимся с тобой вдвоем! Корпус во время бега лучше наклонять вперед: так ты сможешь задействовать силу инерции, а это позволит тебе бежать быстрее, или просто меньше напрягать мышцы, а значит, развиваться быстрее. У меня есть упражнения для работы над этим, только обещай их делать! Ниже поделюсь.";
+        }
+
+      default:
+        return "Нет данных для отображения.";
+    }
+  };
+  const handleShare = async () => {
+    const canvas = await html2canvas(document.body);
+    const image = canvas.toDataURL("image/png");
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          files: [
+            new File(
+              [await fetch(image).then((res) => res.blob())],
+              "screenshot.png",
+              { type: "image/png" }
+            ),
+          ],
+        });
+      } catch (error) {
+        console.error("Ошибка при попытке поделиться:", error);
+      }
+    } else {
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "screenshot.png";
+      link.click();
+    }
+  };
+
   return (
     <div className="flex flex-col justify-start items-center w-[100%] relative">
       <img
@@ -63,7 +132,13 @@ function FullMetric() {
         className="absolute left-4 mt-[11px]"
         alt=""
       />
-      <p className="mt-[11px] text-[17px] font-syne text-white font-semibold ">
+      <img
+        src="/icons/shared.svg"
+        className="absolute top-[10px] right-[10px]"
+        alt=""
+        onClick={handleShare}
+      />
+      <p className="mt-[11px] text-[17px] font-syne text-white font-semibold w-[90%] text-center">
         {title}
       </p>
       <p
@@ -100,7 +175,7 @@ function FullMetric() {
       {videoUrl && (
         <img
           src="/icons/playVideo.svg"
-          className="absolute top-[140px] z-20"
+          className="absolute top-[200px] z-20"
           style={{ pointerEvents: "none" }}
           alt=""
         />
@@ -108,7 +183,7 @@ function FullMetric() {
       {videoUrl ? (
         <video
           src={videoUrl}
-          className="rounded-lg w-[95%] cursor-pointer h-[200px] object-cover"
+          className="rounded-lg w-[90%] cursor-pointer h-[200px] object-cover mt-[20px]"
           onClick={() => setIsModalOpen(true)}
           onLoadedData={(e) => e.target.pause()}
           muted
@@ -117,7 +192,7 @@ function FullMetric() {
       ) : (
         <Loading /> // Показываем загрузку, пока URL видео не готов
       )}
-      <div className="w-[90%] mt-5 h-[198px] bg-white rounded-lg flex flex-col justify-center items-center">
+      <div className="w-[90%] mt-5 h-[auto] bg-white rounded-lg flex flex-col justify-center items-center py-[20px]">
         {percent < 70 && percent >= 30 && (
           <img src="/images/normIcon.png" className="w-[60px]" alt="" />
         )}
@@ -139,19 +214,10 @@ function FullMetric() {
           className="w-[311px] font-sans font-medium opacity-70 mt-1"
           style={{ lineHeight: "120%" }}
         >
-          Бегун набрал {percent}% по показателю близости удара ногой к центру
-          тяжести, продемонстрировав отличную технику и самоотдачу на
-          тренировках.
+          {getTextByTitleAndPercent(title, percent)}
         </p>
       </div>
-      {/* <p className="mt-[20px] w-[343px] text-[17px] font-syne text-white font-semibold ">Упражнения</p>
-      <div className="flex mt-2 justify-start items-center gap-[8px] w-[343px]  mb-3 pb-2" style={{ overflowX: 'scroll' }}>
-          <img className='w-[90px]' src="/images/exercices/Bounding.svg" alt="" />
-          <img className='w-[90px]' src="/images/exercices/high_kness.svg" alt="" />
-          <img className='w-[90px]' src="/images/exercices/Stretching.svg" alt="" />
-          <img className='w-[90px] mr-2' src="/images/exercices/Scissors.svg" alt="" />
-      </div> */}
-      <Button onClick={() => navigate("/results")} className="mt-5">
+      <Button onClick={() => navigate("/results")} className="mt-5 mb-3">
         Получить упражнения
       </Button>
     </div>

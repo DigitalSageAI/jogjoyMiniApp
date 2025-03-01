@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function WaitPopup({ closePopup }) {
   const [timeLeft, setTimeLeft] = useState(0); // Состояние для оставшегося времени
-  const savedTime = localStorage.getItem('time'); // Дата из localStorage
-  const navigate = useNavigate()
+  const savedTime = localStorage.getItem("time"); // Дата из localStorage
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (savedTime) {
       const targetTime = new Date(savedTime).getTime();
- 
 
       const updateCountdown = () => {
         const now = Date.now();
@@ -18,8 +17,8 @@ function WaitPopup({ closePopup }) {
 
         if (difference <= 0) {
           clearInterval(timer); // Остановить таймер, если время истекло
-          
-          closePopup()
+
+          closePopup();
         }
       };
 
@@ -28,27 +27,39 @@ function WaitPopup({ closePopup }) {
 
       return () => {
         clearInterval(timer);
-        navigate('/analysis')
-       } // Очистить таймер при размонтировании компонента
+        navigate("/analysis");
+      }; // Очистить таймер при размонтировании компонента
     }
   }, [savedTime]);
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center">
       <div className="absolute inset-0 bg-black opacity-90"></div>
+      <img
+        className="absolute top-10 left-2 w-[50px]"
+        src="/icons/Left Arrow Button.svg"
+        alt=""
+        onClick={() => closePopup()}
+      />
       <div
         className="relative w-[95%] h-[300px] rounded-[20px] flex flex-col justify-center items-center"
-        style={{ background: '#1c1c1e' }}
+        style={{ background: "#1c1c1e" }}
       >
         <img src="/logo.svg" className="z-50" alt="Logo" />
         <p className="text-white font-sans w-[90%] text-center mt-5 z-50">
-          {
-            timeLeft < 0 &&
-            <img onClick={() => closePopup()} className='absolute top-3 right-3' src='/icons/Close.svg' />
-          }
-          
+          {timeLeft < 0 && (
+            <img
+              onClick={() => closePopup()}
+              className="absolute top-3 right-3"
+              src="/icons/Close.svg"
+            />
+          )}
+
           {timeLeft > 0 ? (
-            <>Подождите пожалуйста, ваш анализ будет готов через {timeLeft} секунд.</>
+            <>
+              Подождите пожалуйста, ваш анализ будет готов через {timeLeft}{" "}
+              секунд.
+            </>
           ) : (
             <>Ваш анализ готов!</>
           )}

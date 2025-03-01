@@ -173,9 +173,9 @@ function MenuWorkout() {
           )} */}
 
           {/* <img src="/images/exercices/collaj_1.svg" className="mt-6" alt="" /> */}
-          <p className="w-[100%] font-syne text-[15px] text-white font-semibold mt-6">
+          {/* <p className="w-[100%] font-syne text-[15px] text-white font-semibold mt-6">
             Упражнения
-          </p>
+          </p> */}
 
           {/* Отображение тренировок только для выбранной недели */}
           {filteredTraining &&
@@ -225,8 +225,16 @@ function MenuWorkout() {
             ))}
           {/* {(filteredTraining == null ||
             Object.entries(filteredTraining).length === 0) && ( */}
+          {(filteredTraining == null ||
+            Object.entries(filteredTraining).length === 0) && (
+            <div
+              className={`flex flex-col justify-start items-center text-white w-[97%] mb-4`}
+            >
+              Чтобы получить программу тренировок пожалуйста заполните анкету
+            </div>
+          )}
           <Button
-            className="mt-2 w-[320px]"
+            className="mt-2 w-[97%] mb-4"
             onClick={
               filteredTraining && filteredTraining.length >= 1
                 ? () => navigate("/newMain")
