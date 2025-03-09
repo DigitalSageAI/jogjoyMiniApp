@@ -40,15 +40,15 @@ function Uploading() {
       const processed_filename = responseData.processed_filename;
 
       const aproxim_time_left_value = responseData["aproxim_time_left(sec)"]; // 100 секунд
-      await axios
-        .post("/subscribe", {
-          type: ["sub1", "sub4"],
-          id,
-          val: false,
-        })
-        .then((res) => res.data)
-        .then((data) => console.log("Успешно прошла оплата"))
-        .catch((err) => console.log("Не удалось произвести оплату"));
+      // await axios
+      //   .post("/subscribe", {
+      //     type: ["sub1", "sub4"],
+      //     id,
+      //     val: false,
+      //   })
+      //   .then((res) => res.data)
+      //   .then((data) => console.log("Успешно прошла оплата"))
+      //   .catch((err) => console.log("Не удалось произвести оплату"));
       console.log("оставшее вреся", aproxim_time_left_value);
 
       // Получаем текущую дату и прибавляем 100 секунд (100 * 1000 миллисекунд)

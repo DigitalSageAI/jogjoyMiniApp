@@ -132,7 +132,7 @@ function Analysis() {
       >
         {isVideo && !metrics != null && (
           <p className="flex justify-between text-[13px] text-white mt-[13px] w-[90%] ml-[16px]">
-            01.02.2025
+            09.03.2025
             {/* <span className="text-[#0a84ff] cursor-pointer">View</span> */}
           </p>
         )}
@@ -141,11 +141,12 @@ function Analysis() {
             !isVideo && "flex-col"
           } justify-start flex-wrap items-center  mt-2 mb-1 ml-[10px] w-[95%] overflow-x-scroll overflow-y-hidden pb-3 min-h-[110px] gap-1`}
         >
-          {(subscribe?.sub1 == true ||
-            subscribe?.sub2 == true ||
+          {(
+            subscribe?.sub1 == true ||
+            // subscribe?.sub2 == true ||
             subscribe?.sub4 == true ||
-            videoUrl) &&
-          metrics != null ? (
+            videoUrl
+          ) && metrics != null ? (
             metrics.map((metric, index) => (
               <BigMetrics
                 key={index}
@@ -160,23 +161,25 @@ function Analysis() {
                 }
                 blured={
                   !(
-                    subscribe?.sub1 == true ||
-                    subscribe?.sub2 == true ||
-                    subscribe?.sub4 == true 
+                    (
+                      subscribe?.sub1 == true ||
+                      // subscribe?.sub2 == true ||
+                      subscribe?.sub4 == true
+                    )
                     // videoUrl
                   ) && index > 0
                 }
               />
             ))
           ) : (
-            <div className="flex flex-col justify-start items-center h-[300px] ">
+            <div className="flex flex-col justify-start items-center h-[auto] ">
               <div className="flex flex-col justify-start items-center text-white">
                 Здесь пишется история… <br /> Вы еще не проводили анализ техники
                 бега, а чтобы получить свой первый разбор техники бега,
                 загрузите видео по кнопке ниже
               </div>
               <Button
-                className="w-[97%] mt-4"
+                className="w-[97%] mt-4 z-60"
                 onClick={() => {
                   navigate("/uploading");
                 }}
@@ -194,18 +197,18 @@ function Analysis() {
               alt=""
             />
           )}
-          {isVideo && videoUrl ? (
+          {/* {isVideo && videoUrl ? (
             <video
               src={videoUrl}
-              className="rounded-lg w-[95%] cursor-pointer h-[226px] object-cover"
+              className="rounded-lg w-[95%] cursor-pointer h-[126px] object-cover"
               onClick={() => setIsModalOpen(true)}
               onLoadedData={(e) => e.target.pause()}
               muted
-              poster={videoUrl || "/images/video.png"}
+              // poster={videoUrl || "/images/video.png"}
             />
           ) : isVideo ? (
             <Loading />
-          ) : null}
+          ) : null} */}
         </div>
       </div>
       {isModalOpen && (

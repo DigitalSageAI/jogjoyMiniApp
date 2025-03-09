@@ -45,8 +45,7 @@ function Workout() {
   }, []);
 
   // Проверка, есть ли хотя бы одна активная подписка
-  const hasActiveSubscription =
-    subscribe?.sub1 || subscribe?.sub2 || subscribe?.sub3 || subscribe?.sub4;
+  const hasActiveSubscription = subscribe?.sub3 || subscribe?.sub4;
 
   return (
     <>

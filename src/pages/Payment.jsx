@@ -39,7 +39,7 @@ function Payment() {
             // alert("Успешно прошла оплата");
             localStorage.removeItem("type"); // Удаляем type после оформления
 
-            navigate(-1);
+            navigate(-2);
           })
           .catch(() => alert("Не удалось произвести оплату"));
       }
@@ -57,16 +57,16 @@ function Payment() {
   const payment = async () => {
     let summ, type;
     if (tarif === "1 month") {
-      summ = 69000;
+      summ = 79000;
       type = "sub1";
     } else if (tarif === "1 year") {
-      summ = 345000;
+      summ = 79000;
       type = "sub2";
     } else if (tarif === "3 month") {
-      summ = 92000;
+      summ = 249000;
       type = "sub3";
     } else if (tarif === "3 year") {
-      summ = 157000;
+      summ = 499000;
       type = "sub4";
     }
 
@@ -151,16 +151,16 @@ function Payment() {
       </h1>
 
       {selected === "onePerson" ? (
-        <div className="mt-[30px] flex justify-start items-start gap-[9px]">
+        <div className="mt-[30px] flex justify-center items-start gap-[9px]">
           {/* Карточка тарифа "1 month" */}
           <div
             onClick={() => setTarif("1 month")}
-            className={`p-[10px] w-[167px] ${
-              expandedCards["1 month"] ? "h-auto" : "h-[254px]"
+            className={`p-[10px] w-[90%] ${
+              expandedCards["1 month"] ? "h-auto" : "h-[194px]"
             } rounded-[8px] flex flex-col justify-start items-start bg-[#2c2c30] cursor-pointer`}
             style={tarif === "1 month" ? { border: "1px solid #25c73d" } : {}}
           >
-            <p className="font-sans font-semibold text-white text-[13px]">
+            <p className="font-sans font-semibold text-white text-[16px]">
               Купить расширенный анализ техники бега и программу тренировок
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
@@ -188,58 +188,13 @@ function Payment() {
               {!expandedCards["1 month"] ? "Подробнее" : "Скрыть"}
             </button>
             {/* Дополнительный контент при раскрытии */}
-            <img src="/icons/Line.svg" className="mt-2" alt="" />
+            <img src="/icons/Line.svg" className="mt-2 w-[100%]" alt="" />
             <p className="mt-2 font-sans font-semibold text-[17px] text-white">
-              690 руб.
+              790 руб.
             </p>
           </div>
 
           {/* Карточка тарифа "1 year" */}
-          <div
-            onClick={() => setTarif("1 year")}
-            className={`relative p-[10px] w-[167px] ${
-              expandedCards["1 year"] ? "h-auto" : "h-[254px]"
-            } rounded-[8px] flex flex-col justify-start items-start bg-[#2c2c30] cursor-pointer`}
-            style={tarif === "1 year" ? { border: "1px solid #25c73d" } : {}}
-          >
-            <img
-              src="/icons/sale.svg"
-              className="absolute top-[-30px] right-[-20px]"
-              alt=""
-            />
-            <p className="font-sans font-semibold text-white text-[13px]">
-              Купить безлимитное количество расширенных анализов техники бега и
-              программ тренировок на 12 месяцев
-            </p>
-            <div className="flex justify-start items-start gap-1 mt-2">
-              <p className="font-sans text-white text-[13px] opacity-70">
-                Удобно для тех,
-              </p>
-            </div>
-            {/* Кнопка "Подробнее" */}
-            {/* Дополнительный контент при раскрытии */}
-            {expandedCards["1 year"] && (
-              <div className="">
-                <p className="font-sans text-white text-[13px] opacity-70">
-                  кто серьёзно относится к работе над техникой и планирует
-                  совершенствовать её на постоянной основе.
-                </p>
-              </div>
-            )}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleExpanded("1 year");
-              }}
-              className="mt-2 text-blue-400 text-xs underline"
-            >
-              {!expandedCards["1 year"] ? "Подробнее" : "Скрыть"}
-            </button>
-            <img src="/icons/Line.svg" className="mt-2" alt="" />
-            <p className="mt-2 font-sans font-semibold text-[17px] text-white">
-              3450 руб.
-            </p>
-          </div>
         </div>
       ) : (
         <div className="mt-[30px] flex justify-start items-start gap-[9px]">
@@ -281,7 +236,7 @@ function Payment() {
             </button>
             <img src="/icons/Line.svg" className="mt-2" alt="" />
             <p className="mt-2 font-sans font-semibold text-[17px] text-white">
-              920 руб.
+              2490 руб.
             </p>
           </div>
 
@@ -293,13 +248,22 @@ function Payment() {
             } rounded-[8px] flex flex-col justify-start items-start bg-[#2c2c30] cursor-pointer`}
             style={tarif === "3 year" ? { border: "1px solid #25c73d" } : {}}
           >
-            <p className="font-sans font-semibold text-white text-[13px]">
+            <img
+              src="/icons/sale.svg"
+              className="absolute top-[-30px] right-[-20px]"
+              alt=""
+            />
+            {/* <p className="font-sans font-semibold text-white text-[13px]">
               Купить персонализированную тренировочную программу для подготовки
               к забегу с функционалом работы над техникой
+            </p> */}
+            <p className="font-sans font-semibold text-white text-[16px]">
+              Подписка с безлимитом
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
               <p className="font-sans text-white text-[13px] opacity-70">
-                Удобно для тех,
+                Удобно для тех, кто хочет подготовиться к забегу максимально
+                эффективно и снизить риск получения травмы.
               </p>
             </div>
             {/* Кнопка "Подробнее" */}
@@ -307,10 +271,9 @@ function Payment() {
             {expandedCards["3 year"] && (
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
-                  кто хочет подготовиться к забегу максимально эффективно и
-                  снизить риск получения травмы. Проведение регулярных анализов
-                  техники бега и персонализированные комплексы специальных
-                  беговых упражнений уже включены в стоимость
+                  Проведение регулярных анализов техники бега и
+                  персонализированные комплексы специальных беговых упражнений
+                  уже включены в стоимость
                 </p>
               </div>
             )}
@@ -325,7 +288,7 @@ function Payment() {
             </button>
             <img src="/icons/Line.svg" className="mt-2" alt="" />
             <p className="mt-2 font-sans font-semibold text-[17px] text-white">
-              1570 руб.
+              4990 руб.
             </p>
           </div>
         </div>

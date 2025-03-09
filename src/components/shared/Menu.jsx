@@ -173,7 +173,7 @@ function Menu() {
         <div className="mt-4 mb-5 ml-[10px]">
           {isVideo && <h3 className="font-semibold mb-2 font-syne">Метрики</h3>}
           {(subscribe?.sub1 == true ||
-            subscribe?.sub2 == true ||
+            // subscribe?.sub2 == true ||
             subscribe?.sub4 == true ||
             videoUrl) &&
           metrics != null ? (
@@ -186,7 +186,7 @@ function Menu() {
                 blured={
                   !(
                     subscribe?.sub1 == true ||
-                    subscribe?.sub2 == true ||
+                    // subscribe?.sub2 == true ||
                     subscribe?.sub4 == true ||
                     videoUrl
                   )
@@ -198,7 +198,7 @@ function Menu() {
                 blured={
                   !(
                     subscribe?.sub1 == true ||
-                    subscribe?.sub2 == true ||
+                    // subscribe?.sub2 == true ||
                     subscribe?.sub4 == true ||
                     videoUrl
                   )
@@ -210,7 +210,7 @@ function Menu() {
                 blured={
                   !(
                     subscribe?.sub1 == true ||
-                    subscribe?.sub2 == true ||
+                    // subscribe?.sub2 == true ||
                     subscribe?.sub4 == true ||
                     videoUrl
                   )

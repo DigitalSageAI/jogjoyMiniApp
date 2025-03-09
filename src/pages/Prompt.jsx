@@ -41,8 +41,8 @@ function Prompt() {
   const handleGeneratePrompt = async () => {
     if (
       !subscribe?.sub3 &&
-      !subscribe?.sub1 &&
-      !subscribe?.sub2 &&
+      // !subscribe?.sub1 &&
+      // !subscribe?.sub2 &&
       !subscribe?.sub4
     ) {
       localStorage.setItem("selectedTarif", "clubMembership");
@@ -108,14 +108,14 @@ function Prompt() {
             trainingPlan: parsedData,
           })
           .then(() => {
-            axios
-              .post("/subscribe", {
-                type: ["sub3", "sub4"],
-                id,
-                val: false,
-              })
-              .then(() => console.log("Успешно прошла оплата"))
-              .catch(() => console.log("Не удалось произвести оплату"));
+            // axios
+            //   .post("/subscribe", {
+            //     type: ["sub3", "sub4"],
+            //     id,
+            //     val: false,
+            //   })
+            //   .then(() => console.log("Успешно прошла оплата"))
+            //   .catch(() => console.log("Не удалось произвести оплату"));
 
             setLoading(false);
             navigate("/main");
