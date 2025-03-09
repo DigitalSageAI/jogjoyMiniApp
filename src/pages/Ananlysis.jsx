@@ -196,18 +196,18 @@ function Analysis() {
               alt=""
             />
           )}
-          {/* {isVideo && videoUrl ? (
+          {isVideo && videoUrl ? (
             <video
               src={videoUrl}
-              className="rounded-lg w-[95%] cursor-pointer h-[126px] object-cover"
+              className="rounded-lg w-[95%] cursor-pointer h-[226px] object-cover"
               onClick={() => setIsModalOpen(true)}
               onLoadedData={(e) => e.target.pause()}
               muted
-              // poster={videoUrl || "/images/video.png"}
+              poster={videoUrl || "/images/video.png"}
             />
           ) : isVideo ? (
             <Loading />
-          ) : null} */}
+          ) : null}
         </div>
       </div>
       {isModalOpen && (

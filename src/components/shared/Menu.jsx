@@ -185,9 +185,7 @@ function Menu() {
               <Metric
                 blured={
                   !(
-                    subscribe?.sub1 == true ||
-                    // subscribe?.sub2 == true ||
-                    subscribe?.sub4 == true ||
+                    (subscribe?.sub1 == true || subscribe?.sub4 == true) &&
                     videoUrl
                   )
                 }
@@ -197,9 +195,7 @@ function Menu() {
               <Metric
                 blured={
                   !(
-                    subscribe?.sub1 == true ||
-                    // subscribe?.sub2 == true ||
-                    subscribe?.sub4 == true ||
+                    (subscribe?.sub1 == true || subscribe?.sub4 == true) &&
                     videoUrl
                   )
                 }
@@ -209,9 +205,7 @@ function Menu() {
               <Metric
                 blured={
                   !(
-                    subscribe?.sub1 == true ||
-                    // subscribe?.sub2 == true ||
-                    subscribe?.sub4 == true ||
+                    (subscribe?.sub1 == true || subscribe?.sub4 == true) &&
                     videoUrl
                   )
                 }

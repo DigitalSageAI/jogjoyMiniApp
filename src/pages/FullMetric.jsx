@@ -9,6 +9,7 @@ function FullMetric() {
   const [selected, setSelected] = useState("Analysis");
   const navigate = useNavigate();
   const percent = localStorage.getItem("percent");
+  const [subscribe, setSubscribe] = useState(null);
   const title = localStorage.getItem("title");
   const [videoUrl, setVideoUrl] = useState("");
   const id = localStorage.getItem("id");
@@ -19,6 +20,12 @@ function FullMetric() {
       .get(`/getUserById/${id}`)
       .then((response) => response.data)
       .then((data) => {
+        setSubscribe({
+          sub1: data.sub1,
+          sub2: data.sub2,
+          sub3: data.sub3,
+          sub4: data.sub4,
+        });
         if (data.analysis?.videoUrl) {
           const videoApiUrl = `https://ai.jogjoy.run/apik/uploads/${data.analysis.videoUrl}`;
 
@@ -217,7 +224,17 @@ function FullMetric() {
           {getTextByTitleAndPercent(title, percent)}
         </p>
       </div>
-      <Button onClick={() => navigate("/results")} className="mt-5 mb-3">
+      <Button
+        onClick={
+          subscribe?.sub1 == true || subscribe?.sub4 == true
+            ? () => navigate("/results")
+            : () => {
+                navigate("/payment");
+                localStorage.setItem("selectedTarif", "clubMembership");
+              }
+        }
+        className="mt-5 mb-3"
+      >
         Получить упражнения
       </Button>
     </div>
