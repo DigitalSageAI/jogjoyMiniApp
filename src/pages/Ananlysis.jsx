@@ -141,12 +141,11 @@ function Analysis() {
             !isVideo && "flex-col"
           } justify-start flex-wrap items-center  mt-2 mb-1 ml-[10px] w-[95%] overflow-x-scroll overflow-y-hidden pb-3 min-h-[110px] gap-1`}
         >
-          {(
-            subscribe?.sub1 == true ||
+          {(subscribe?.sub1 == true ||
             // subscribe?.sub2 == true ||
             subscribe?.sub4 == true ||
-            videoUrl
-          ) && metrics != null ? (
+            videoUrl) &&
+          metrics != null ? (
             metrics.map((metric, index) => (
               <BigMetrics
                 key={index}
@@ -243,14 +242,13 @@ function Analysis() {
             if (metrics == null) {
               navigate("/uploading");
             } else if (
-              (subscribe?.sub1 === true ||
-                subscribe?.sub2 === true ||
-                subscribe?.sub4 === true) &&
+              (subscribe?.sub1 === true || subscribe?.sub4 === true) &&
               videoUrl
             ) {
               navigate("/results");
             } else {
               navigate("/payment");
+              localStorage.setItem("selectedTarif", "clubMembership");
             }
           }}
           className="mt-0"
