@@ -188,7 +188,11 @@ function Payment() {
               {!expandedCards["1 month"] ? "Подробнее" : "Скрыть"}
             </button>
             {/* Дополнительный контент при раскрытии */}
-            <img src="/icons/Line.svg" className="mt-2 w-[100%]" alt="" />
+            {/* <img src="/icons/Line.svg" className="mt-2 w-[100%]" alt="" /> */}
+            <div
+              className="w-[100%] h-[1px] mt-3"
+              style={{ background: "rgb(69, 69, 69)" }}
+            ></div>
             <p className="mt-2 font-sans font-semibold text-[17px] text-white">
               790 руб.
             </p>
