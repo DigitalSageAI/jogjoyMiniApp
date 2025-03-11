@@ -69,6 +69,7 @@ function Payment() {
   };
 
   const checkPromo = async () => {
+    e.target.blur();
     if (!promo) return;
     try {
       const existingPromo = promos.find((p) => p.name === promo);
@@ -228,7 +229,7 @@ function Payment() {
               style={{ background: "rgb(69, 69, 69)" }}
             ></div>
             <p className="mt-2 font-sans font-semibold text-[17px] text-white">
-              {promoPrice} руб.
+              {Math.round(promoPrice)} руб.
             </p>
           </div>
 
@@ -248,7 +249,6 @@ function Payment() {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 checkPromo();
-                e.target.blur(); // Убираем фокус, чтобы скрыть клавиатуру
               }
             }}
           ></input>
