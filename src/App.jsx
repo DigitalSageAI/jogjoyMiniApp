@@ -23,6 +23,7 @@ import TrainingPage from "./pages/TrainingPage";
 import Results from "./pages/Results";
 import Prompt from "./pages/Prompt";
 import Admin from "./pages/Admin";
+import Promo from "./pages/Promo";
 
 function App() {
   useEffect(() => {
@@ -54,6 +55,7 @@ function App() {
           <Route path="/prompt" element={<Prompt />} />
         </Route>
         <Route path="/admin" element={<Admin />} />
+        <Route path="/promo" element={<Promo />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/" element={<StartPage />} index />
         <Route path="/signIn" element={<SignIn />} />

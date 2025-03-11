@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "../axios";
+import { useNavigate } from "react-router-dom";
 
 const BOT_TOKEN = "7277557145:AAEwgi1zaHFOayVrYnf-n9oh8ytg8Iyl5TA";
 
@@ -57,6 +58,7 @@ function Admin() {
     setIsBroadcastModalOpen(false);
     setBroadcastMessage("");
   };
+  const navigate = useNavigate();
 
   const sendMessage = async () => {
     if (!message.trim()) return alert("Введите сообщение!");
@@ -133,7 +135,7 @@ function Admin() {
   return (
     <div className="p-5">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold text-white">Админ-панель</h2>
+        {/* <h2 className="text-lg font-bold text-white">Админ-панель</h2> */}
         <div className="flex space-x-2">
           <button
             className="px-3 py-1 bg-green-500 text-white rounded"
@@ -146,6 +148,12 @@ function Admin() {
             onClick={handleLogout}
           >
             Выйти
+          </button>
+          <button
+            className="px-3 py-1 bg-yellow-400 text-white rounded"
+            onClick={() => navigate("/promo")}
+          >
+            Промокоды
           </button>
         </div>
       </div>

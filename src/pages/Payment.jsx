@@ -3,6 +3,7 @@ import Button from "../components/ui/Button";
 import axios from "../axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import sha256 from "crypto-js/sha256";
+import Input from "../components/ui/Input";
 
 function Payment() {
   const [selected, setSelected] = useState("onePerson");
@@ -12,6 +13,10 @@ function Payment() {
   const [expandedCards, setExpandedCards] = useState({});
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [promo, setPromo] = useState();
+  const [promos, setPromos] = useState();
+  const [promoPrice, setPromoPrice] = useState(790);
+  const [used, setUsed] = useState(false);
 
   useEffect(() => {
     const selectedTarif = localStorage.getItem("selectedTarif");
@@ -46,6 +51,15 @@ function Payment() {
     }
   }, [searchParams, id]);
 
+  useEffect(() => {
+    axios
+      .get("/promo")
+      .then((res) => res.data)
+      .then((data) => {
+        setPromos(data);
+      });
+  }, []);
+
   const generateToken = (data) => {
     const sortedValues = Object.keys(data)
       .sort()
@@ -54,13 +68,33 @@ function Payment() {
     return sha256(tokenString).toString(); // Хэшируем SHA-256
   };
 
+  const checkPromo = async () => {
+    if (!promo) return;
+    try {
+      const existingPromo = promos.find((p) => p.name === promo);
+      if (existingPromo && used == false) {
+        setUsed(true);
+        setPromoPrice((prev) => prev - (prev * existingPromo.percent) / 100);
+        alert(
+          `Промокод найден: ${existingPromo.name} - ${existingPromo.percent}% скидка`
+        );
+      } else if (used == true) {
+        alert("Вы уже использовали промокод");
+      } else {
+        alert("Промокод не найден");
+      }
+    } catch (error) {
+      console.error("Ошибка при проверке промокода", error);
+    }
+  };
+
   const payment = async () => {
     let summ, type;
     if (tarif === "1 month") {
-      summ = 79000;
+      summ = Number(promoPrice + "00");
       type = "sub1";
     } else if (tarif === "1 year") {
-      summ = 79000;
+      summ = Number(promoPrice + "00");
       type = "sub2";
     } else if (tarif === "3 month") {
       summ = 249000;
@@ -151,7 +185,7 @@ function Payment() {
       </h1>
 
       {selected === "onePerson" ? (
-        <div className="mt-[30px] flex justify-center items-start gap-[9px]">
+        <div className="mt-[30px] flex flex-col justify-start items-center gap-[9px]">
           {/* Карточка тарифа "1 month" */}
           <div
             onClick={() => setTarif("1 month")}
@@ -194,11 +228,30 @@ function Payment() {
               style={{ background: "rgb(69, 69, 69)" }}
             ></div>
             <p className="mt-2 font-sans font-semibold text-[17px] text-white">
-              790 руб.
+              {promoPrice} руб.
             </p>
           </div>
 
           {/* Карточка тарифа "1 year" */}
+          <input
+            style={{
+              background: "rgba(118, 118, 128, 0.24)",
+              color: "white",
+              border: "1px solid rgba(84, 84, 88, 0.65)",
+            }}
+            className={
+              "rounded-[8px] w-[342px] h-[58px] focus:outline-none px-[17px] placeholder:text-middleGray"
+            }
+            onChange={(e) => setPromo(e.target.value)}
+            placeholder="Промокод"
+            onBlur={checkPromo}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                checkPromo();
+                e.target.blur(); // Убираем фокус, чтобы скрыть клавиатуру
+              }
+            }}
+          ></input>
         </div>
       ) : (
         <div className="mt-[30px] flex justify-start items-start gap-[9px]">
