@@ -68,7 +68,7 @@ function Payment() {
     return sha256(tokenString).toString(); // Хэшируем SHA-256
   };
 
-  const checkPromo = async () => {
+  const checkPromo = async (e) => {
     e.target.blur();
     if (!promo) return;
     try {
@@ -245,10 +245,10 @@ function Payment() {
             }
             onChange={(e) => setPromo(e.target.value)}
             placeholder="Промокод"
-            onBlur={checkPromo}
+            onBlur={(e) => checkPromo(e)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                checkPromo();
+                checkPromo(e);
               }
             }}
           ></input>
@@ -263,13 +263,13 @@ function Payment() {
             } rounded-[8px] flex flex-col justify-start items-start bg-[#2c2c30] cursor-pointer`}
             style={tarif === "3 month" ? { border: "1px solid #25c73d" } : {}}
           >
-            <p className="font-sans font-semibold text-white text-[13px]">
-              Купить персонализированную тренировочную программу для подготовки
-              к забегу
+            <p className="font-sans font-semibold text-white text-[16px]">
+              Персональный план подготовки к забегу
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
               <p className="font-sans text-white text-[13px] opacity-70">
-                Программа разрабатывается исходя
+                Удобно для тех кто хочет подготовиться к забегу максимально
+                эффективно и снизить
               </p>
             </div>
             {/* Кнопка "Подробнее" */}
@@ -277,8 +277,7 @@ function Payment() {
             {expandedCards["3 month"] && (
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
-                  из текущего состояния спортсмена, сроков проведения забега
-                  целей на забег. Анализ техники бега не включен в стоимость.
+                  получения травмы.
                 </p>
               </div>
             )}
@@ -315,26 +314,22 @@ function Payment() {
               к забегу с функционалом работы над техникой
             </p> */}
             <p className="font-sans font-semibold text-white text-[16px]">
-              Подписка с безлимитом
+              Безлимит на год
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
               <p className="font-sans text-white text-[13px] opacity-70">
-                Удобно для тех, кто хочет подготовиться к забегу максимально
-                эффективно и снизить риск получения травмы.
+                Можно составлять программу и проводить анализы техники
+                неограниченное количество раз
               </p>
             </div>
             {/* Кнопка "Подробнее" */}
             {/* Дополнительный контент при раскрытии */}
-            {expandedCards["3 year"] && (
+            {/* {expandedCards["3 year"] && (
               <div className="">
-                <p className="font-sans text-white text-[13px] opacity-70">
-                  Проведение регулярных анализов техники бега и
-                  персонализированные комплексы специальных беговых упражнений
-                  уже включены в стоимость
-                </p>
+                <p className="font-sans text-white text-[13px] opacity-70"></p>
               </div>
-            )}
-            <button
+            )} */}
+            {/* <button
               onClick={(e) => {
                 e.stopPropagation();
                 toggleExpanded("3 year");
@@ -342,8 +337,8 @@ function Payment() {
               className="mt-2 text-blue-400 text-xs underline"
             >
               {!expandedCards["3 year"] ? "Подробнее" : "Скрыть"}
-            </button>
-            <img src="/icons/Line.svg" className="mt-2" alt="" />
+            </button> */}
+            <img src="/icons/Line.svg" className="mt-[60px]" alt="" />
             <p className="mt-2 font-sans font-semibold text-[17px] text-white">
               4990 руб.
             </p>

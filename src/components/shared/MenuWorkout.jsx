@@ -11,10 +11,11 @@ function MenuWorkout() {
   const [isOpen, setIsOpen] = useState(true);
   const [week, setWeek] = useState("1");
   const [trainingPlan, setTrainingPlan] = useState([]);
-  const [filteredTraining, setFilteredTraining] = useState({});
+  const [filteredTraining, setFilteredTraining] = useState(null);
   const [subscribe, setSubscribe] = useState();
   const navigate = useNavigate();
   const id = localStorage.getItem("id");
+  // console.log("filteredTraining", filteredTraining.length);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -236,12 +237,12 @@ function MenuWorkout() {
           <Button
             className="mt-2 w-[97%] mb-4"
             onClick={
-              filteredTraining && filteredTraining.length >= 1
-                ? () => navigate("/newMain")
+              filteredTraining
+                ? () => navigate("/trainingPage")
                 : () => navigate("/prompt")
             }
           >
-            {filteredTraining && filteredTraining.length >= 1
+            {filteredTraining
               ? "Перейти к тренировке"
               : "Получить план тренировки"}
           </Button>

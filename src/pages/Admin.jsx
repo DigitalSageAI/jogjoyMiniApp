@@ -178,6 +178,41 @@ function Admin() {
         ))}
       </ul>
 
+      {isModalOpen && selectedUser && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+          onClick={closeModal}
+        >
+          <div
+            className="bg-white p-5 rounded shadow-lg w-96 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-2 right-2 text-gray-600 text-xl"
+              onClick={closeModal}
+            >
+              ×
+            </button>
+            <h3 className="text-lg font-semibold mb-3">
+              Отправить сообщение {selectedUser.name || selectedUser.telegramId}
+            </h3>
+            <textarea
+              className="w-full p-2 border rounded mb-3"
+              rows="4"
+              placeholder="Введите сообщение..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            ></textarea>
+            <button
+              className="px-3 py-1 bg-blue-500 text-white rounded w-full"
+              onClick={sendMessage}
+            >
+              Отправить
+            </button>
+          </div>
+        </div>
+      )}
+
       {isBroadcastModalOpen && (
         <div
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
