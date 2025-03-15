@@ -13,9 +13,11 @@ function TrainingPage() {
   const [sbu, setSbu] = useState(false);
   const [details1, setDetails1] = useState();
 
+  const details = JSON.parse(localStorage.getItem("details"));
   useEffect(() => {
     const id = localStorage.getItem("id");
     const details = JSON.parse(localStorage.getItem("details"));
+
     setDetails1(details);
 
     if (details["СБУ"] == true || details["SБУ"] == true) {
@@ -181,7 +183,18 @@ function TrainingPage() {
             </div>
           );
         })}
-      <Button onClick={addTraining} className="mt-4 mb-3">
+      <Button
+        onClick={
+          details?.analys == true
+            ? () => {
+                navigate("/uploading");
+              }
+            : () => {
+                addTraining();
+              }
+        }
+        className="mt-4 mb-3"
+      >
         {buttonContent}
       </Button>
     </div>
