@@ -16,6 +16,7 @@ function Prompt() {
   const [loading, setLoading] = useState(false);
   const [subscribe, setSubscribe] = useState();
   const [trainingPlan, setTrainingPlan] = useState([]);
+  const [analys, setAnalys] = useState(false);
   const id = localStorage.getItem("id");
   const navigate = useNavigate();
 
@@ -25,7 +26,12 @@ function Prompt() {
       .then((res) => res.data)
       .then((data) => {
         if (data) {
-          console.log(data);
+          console.log(data.analysis);
+          if (data?.analysis?.videoUrl) {
+            setAnalys(true);
+          } else {
+            setAnalys(false);
+          }
           setSubscribe({
             sub1: data.sub1,
             sub2: data.sub2,
@@ -39,98 +45,103 @@ function Prompt() {
   }, [id]);
 
   const handleGeneratePrompt = async () => {
-    if (
-      !subscribe?.sub3 &&
-      // !subscribe?.sub1 &&
-      // !subscribe?.sub2 &&
-      !subscribe?.sub4
-    ) {
-      localStorage.setItem("selectedTarif", "clubMembership");
-      navigate("/payment");
-      return;
-    }
-    if (
-      !level ||
-      !currentTime ||
-      !targetTime ||
-      !weeklyTrainings ||
-      !marathonDistance ||
-      !timeLeft ||
-      !startDate
-    ) {
-      setError("Все поля должны быть заполнены.");
-      return;
-    }
+    if (!analys) {
+      alert("Вы еще не сделали анализ");
+      navigate("/video");
+    } else {
+      if (
+        !subscribe?.sub3 &&
+        // !subscribe?.sub1 &&
+        // !subscribe?.sub2 &&
+        !subscribe?.sub4
+      ) {
+        localStorage.setItem("selectedTarif", "clubMembership");
+        navigate("/payment");
+        return;
+      }
+      if (
+        !level ||
+        !currentTime ||
+        !targetTime ||
+        !weeklyTrainings ||
+        !marathonDistance ||
+        !timeLeft ||
+        !startDate
+      ) {
+        setError("Все поля должны быть заполнены.");
+        return;
+      }
 
-    const prompt = `Сгенерируй тренировочную программу для подготовки к забегу на ${marathonDistance} км за ${timeLeft}. Исходные данные: уровень ${level}, текущий результат ${currentTime} минут, целевой результат ${targetTime} минут. 
-  В тренировочную программу включи:
-  - СБУ 2 раза в неделю после бега.
-  - 1 раз в две недели анализ техники бега (помечай его в json файле analys: true).
-  Разовый объем тренировок не должен превышать 80% от ${marathonDistance} км. Количество тренировок в неделю - ${weeklyTrainings}.
-  Дата начала тренировок: ${startDate}.
-  Ответ верни в **валидном JSON-формате**:
-  [
-    {
-      "week1": {
-        "Понедельник": { 
-          "Дата": "${startDate}",
-          "Тип тренировки": "", 
-          "Дистанция": "", 
-          "Заметки": "",
-          "СБУ": true
+      const prompt = `Сгенерируй тренировочную программу для подготовки к забегу на ${marathonDistance} км за ${timeLeft}. Исходные данные: уровень ${level}, текущий результат ${currentTime} минут, целевой результат ${targetTime} минут. 
+    В тренировочную программу включи:
+    - СБУ 2 раза в неделю после бега.
+    - 1 раз в две недели анализ техники бега (помечай его в json файле analys: true).
+    Разовый объем тренировок не должен превышать 80% от ${marathonDistance} км. Количество тренировок в неделю - ${weeklyTrainings}.
+    Дата начала тренировок: ${startDate}.
+    Ответ верни в **валидном JSON-формате**:
+    [
+      {
+        "week1": {
+          "Понедельник": { 
+            "Дата": "${startDate}",
+            "Тип тренировки": "", 
+            "Дистанция": "", 
+            "Заметки": "",
+            "СБУ": true
+          }
         }
       }
-    }
-  ]`;
+    ]`;
 
-    try {
-      if (id) {
-        setLoading(true);
-        const response = await axios.post("/generate", { prompt });
-        let data = response.data?.content;
+      try {
+        if (id) {
+          setLoading(true);
+          const response = await axios.post("/generate", { prompt });
+          let data = response.data?.content;
 
-        console.log("Сырой ответ OpenAI:", data);
+          console.log("Сырой ответ OpenAI:", data);
 
-        // Очистка данных от лишних символов
-        if (typeof data === "string") {
-          data = data.replace(/```json|```/g, "").trim(); // Удаляем `json` и ```
+          // Очистка данных от лишних символов
+          if (typeof data === "string") {
+            data = data.replace(/```json|```/g, "").trim(); // Удаляем `json` и ```
+          }
+
+          // Парсим JSON
+          const parsedData = JSON.parse(data);
+          console.log("Парсинг JSON успешен:", parsedData);
+
+          setTrainingPlan(parsedData);
+
+          axios
+            .post("/saveTraining", {
+              userId: id,
+              trainingPlan: parsedData,
+            })
+            .then(() => {
+              // axios
+              //   .post("/subscribe", {
+              //     type: ["sub3", "sub4"],
+              //     id,
+              //     val: false,
+              //   })
+              //   .then(() => console.log("Успешно прошла оплата"))
+              //   .catch(() => console.log("Не удалось произвести оплату"));
+
+              setLoading(false);
+              navigate("/main");
+            })
+            .catch(() => {
+              alert("Не удалось сохранить данные");
+              setLoading(false);
+            });
+        } else {
+          alert("Ошибка авторизации");
         }
-
-        // Парсим JSON
-        const parsedData = JSON.parse(data);
-        console.log("Парсинг JSON успешен:", parsedData);
-
-        setTrainingPlan(parsedData);
-
-        axios
-          .post("/saveTraining", {
-            userId: id,
-            trainingPlan: parsedData,
-          })
-          .then(() => {
-            // axios
-            //   .post("/subscribe", {
-            //     type: ["sub3", "sub4"],
-            //     id,
-            //     val: false,
-            //   })
-            //   .then(() => console.log("Успешно прошла оплата"))
-            //   .catch(() => console.log("Не удалось произвести оплату"));
-
-            setLoading(false);
-            navigate("/main");
-          })
-          .catch(() => {
-            alert("Не удалось сохранить данные");
-            setLoading(false);
-          });
-      } else {
-        alert("Ошибка авторизации");
+      } catch (error) {
+        setLoading(false);
+        console.error("Ошибка парсинга JSON:", error.message);
+        setError("Не удалось сгенерировать план. Попробуйте снова.");
       }
-    } catch (error) {
-      setLoading(false);
-      console.error("Ошибка парсинга JSON:", error.message);
-      setError("Не удалось сгенерировать план. Попробуйте снова.");
     }
   };
 

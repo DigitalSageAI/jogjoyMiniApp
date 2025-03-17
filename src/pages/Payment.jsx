@@ -268,7 +268,7 @@ function Payment() {
             </p>
             <div className="flex justify-start items-start gap-1 mt-2">
               <p className="font-sans text-white text-[13px] opacity-70">
-                Удобно для тех кто хочет подготовиться к забегу максимально
+                Удобно для тех, кто хочет подготовиться к забегу максимально
                 эффективно и снизить
               </p>
             </div>
@@ -277,7 +277,7 @@ function Payment() {
             {expandedCards["3 month"] && (
               <div className="">
                 <p className="font-sans text-white text-[13px] opacity-70">
-                  получения травмы.
+                  риск получения травмы.
                 </p>
               </div>
             )}
