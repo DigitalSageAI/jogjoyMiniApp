@@ -26,7 +26,7 @@ function Payment() {
 
       localStorage.removeItem("selectedTarif");
     }
-    const success = searchParams.get("Success") === "true";
+    const success = searchParams.get("Success") == "true";
     const errorCode = searchParams.get("ErrorCode");
     console.log(success);
 
