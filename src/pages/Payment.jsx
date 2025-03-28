@@ -22,57 +22,56 @@ function Payment() {
   const basePrice = 790;
 
 
-  useEffect(() => {
-    const selectedTarif = localStorage.getItem("selectedTarif");
-    if (selectedTarif && selectedTarif === "clubMembership") {
-      setSelected("clubMembership");
-      setTarif("3 year");
-      localStorage.removeItem("selectedTarif");
+useEffect(() => {
+  const selectedTarif = localStorage.getItem("selectedTarif");
+  if (selectedTarif && selectedTarif === "clubMembership") {
+    setSelected("clubMembership");
+    setTarif("3 year");
+    localStorage.removeItem("selectedTarif");
+  }
+
+  const success = searchParams.get("Success") === "true";
+  if (success) {
+    const type = localStorage.getItem("type");
+    const storedPromo = localStorage.getItem("promo");
+    const storedPrice = Number(localStorage.getItem("promoPrice"));
+
+    if (storedPromo && storedPromo.startsWith("4Rr0")) {
+      axios
+        .post("https://script.google.com/macros/s/AKfycbwexnHs82bA_y197olkMsNIr6mLUBpGs__k2VTPhzc5oJl90otWX4UqI3koY98q52dl/exec", {
+          paymentDate: new Date().toISOString(),
+          amount: basePrice,
+          discount: basePrice - storedPrice,
+          promoCode: storedPromo,
+          partnerId: "8b43d763-7659-4ad0-a4b2-c1afc73018e2",
+          starsAmount: ""
+        })
+        .then((response) => {
+          console.log("Данные отправлены в Google Таблицу:", response.data);
+        })
+        .catch((error) => {
+          console.error("Ошибка при отправке данных:", error);
+        });
+
+      localStorage.removeItem("promo");
+      localStorage.removeItem("promoPrice");
     }
-    const success = searchParams.get("Success") === "true";
-    const errorCode = searchParams.get("ErrorCode");
-    console.log(success);
 
-    if (success) {
-      const type = localStorage.getItem("type"); // Достаем сохраненный тариф
-
-      // Скрипт для Russia Running: отправляем данные в Google Таблицу,
-      // если промокод начинается на "4Rr0"
-      if (promo && promo.startsWith("4Rr0")) {
-        axios
-          .post("https://script.google.com/macros/s/AKfycbwexnHs82bA_y197olkMsNIr6mLUBpGs__k2VTPhzc5oJl90otWX4UqI3koY98q52dl/exec", {
-            paymentDate: new Date().toISOString(),
-            amount: basePrice,             // базовая цена до скидки (например, 790)
-            discount: promoPrice,
-            promoCode: promo,
-            partnerId: "8b43d763-7659-4ad0-a4b2-c1afc73018e2",
-            starsAmount: ""                // при необходимости можно передать и другую информацию
-          })
-          .then((response) => {
-            console.log("Данные отправлены в Google Таблицу:", response.data);
-          })
-          .catch((error) => {
-            console.error("Ошибка при отправке данных:", error);
-          });
-      }
-      
-      if (type && id) {
-        axios
-          .post("/subscribe", {
-            type,
-            id,
-            val: true,
-          })
-          .then(() => {
-            // alert("Успешно прошла оплата");
-            localStorage.removeItem("type"); // Удаляем type после оформления
-
-            window.history.go(-3);
-          })
-          .catch(() => alert("Не удалось произвести оплату"));
-      }
+    if (type && id) {
+      axios
+        .post("/subscribe", {
+          type,
+          id,
+          val: true,
+        })
+        .then(() => {
+          localStorage.removeItem("type");
+          window.history.go(-3);
+        })
+        .catch(() => alert("Не удалось произвести оплату"));
     }
-  }, [searchParams, id]);
+  }
+}, [searchParams, id]);
 
   useEffect(() => {
     axios
@@ -96,13 +95,16 @@ function Payment() {
     if (!promo) return;
     try {
       const existingPromo = promos.find((p) => p.name === promo);
-      if (existingPromo && used == false) {
+      if (existingPromo && used === false) {
         setUsed(true);
-        setPromoPrice((prev) => prev - (prev * existingPromo.percent) / 100);
+        const updatedPrice = basePrice - (basePrice * existingPromo.percent) / 100;
+        setPromoPrice(updatedPrice);
+        localStorage.setItem("promo", promo);
+        localStorage.setItem("promoPrice", updatedPrice.toString());
         alert(
           `Промокод найден: ${existingPromo.name} - ${existingPromo.percent}% скидка`
         );
-      } else if (used == true) {
+      } else if (used === true) {
         alert("Вы уже использовали промокод");
       } else {
         alert("Промокод не найден");
