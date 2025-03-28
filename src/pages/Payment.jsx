@@ -18,10 +18,9 @@ function Payment() {
   const [promoPrice, setPromoPrice] = useState(790);
   const [used, setUsed] = useState(false);
 
-  // Определяем базовую цену и процент скидки
+  // Определяем базовую цену
   const basePrice = 790;
-  const discountPercent = 40; // например, 40%
-  const calculatedDiscount = (basePrice * discountPercent) / 100; // 316
+
 
   useEffect(() => {
     const selectedTarif = localStorage.getItem("selectedTarif");
@@ -44,7 +43,7 @@ function Payment() {
           .post("https://script.google.com/macros/s/AKfycbwexnHs82bA_y197olkMsNIr6mLUBpGs__k2VTPhzc5oJl90otWX4UqI3koY98q52dl/exec", {
             paymentDate: new Date().toISOString(),
             amount: basePrice,             // базовая цена до скидки (например, 790)
-            discount: calculatedDiscount,  // вычисленная скидка (например, если скидка 40%, discount = 316)
+            discount: promoPrice,
             promoCode: promo,
             partnerId: "8b43d763-7659-4ad0-a4b2-c1afc73018e2",
             starsAmount: ""                // при необходимости можно передать и другую информацию
