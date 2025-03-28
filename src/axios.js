@@ -2,7 +2,7 @@ import axios from "axios";
 
 const instance = axios.create({
     // baseURL: "http://localhost:3001"
-    baseURL: "https://jogjoyminiappback-production.up.railway.app"
+    baseURL: "https://api.jogjoy.run"
 });
 
 instance.interceptors.request.use((config) => {
