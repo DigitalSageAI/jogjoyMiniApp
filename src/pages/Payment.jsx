@@ -36,26 +36,35 @@ useEffect(() => {
     const storedPromo = localStorage.getItem("promo");
     const storedPrice = Number(localStorage.getItem("promoPrice"));
 
-    if (storedPromo && storedPromo.startsWith("4Rr0")) {
-      axios
-        .post("https://script.google.com/macros/s/AKfycbwexnHs82bA_y197olkMsNIr6mLUBpGs__k2VTPhzc5oJl90otWX4UqI3koY98q52dl/exec", {
-          paymentDate: new Date().toISOString(),
-          amount: basePrice,
-          discount: basePrice - storedPrice,
-          promoCode: storedPromo,
-          partnerId: "8b43d763-7659-4ad0-a4b2-c1afc73018e2",
-          starsAmount: ""
-        })
-        .then((response) => {
-          console.log("Данные отправлены в Google Таблицу:", response.data);
-        })
-        .catch((error) => {
-          console.error("Ошибка при отправке данных:", error);
-        });
+ if (storedPromo && storedPromo.startsWith("4Rr0")) {
+  const discountAmount = basePrice - storedPrice;
 
-      localStorage.removeItem("promo");
-      localStorage.removeItem("promoPrice");
-    }
+  console.log("[Google Sheets] Попытка отправки данных:");
+  console.log("Дата оплаты:", new Date().toISOString());
+  console.log("Базовая цена:", basePrice);
+  console.log("Итоговая цена:", storedPrice);
+  console.log("Скидка:", discountAmount);
+  console.log("Промокод:", storedPromo);
+
+  axios
+    .post("https://script.google.com/macros/s/AKfycbwexnHs82bA_y197olkMsNIr6mLUBpGs__k2VTPhzc5oJl90otWX4UqI3koY98q52dl/exec", {
+      paymentDate: new Date().toISOString(),
+      amount: basePrice,
+      discount: discountAmount,
+      promoCode: storedPromo,
+      partnerId: "8b43d763-7659-4ad0-a4b2-c1afc73018e2",
+      starsAmount: ""
+    })
+    .then((response) => {
+      console.log("[Google Sheets] Ответ сервера:", response.data);
+    })
+    .catch((error) => {
+      console.error("[Google Sheets] Ошибка при отправке данных:", error);
+    });
+
+  localStorage.removeItem("promo");
+  localStorage.removeItem("promoPrice");
+}
 
     if (type && id) {
       axios
