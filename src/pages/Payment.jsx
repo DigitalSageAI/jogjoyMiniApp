@@ -41,7 +41,7 @@ function Payment() {
       // если промокод начинается на "4Rr0"
       if (promo && promo.startsWith("4Rr0")) {
         axios
-          .post("https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec", {
+          .post("https://script.google.com/macros/s/AKfycbwexnHs82bA_y197olkMsNIr6mLUBpGs__k2VTPhzc5oJl90otWX4UqI3koY98q52dl/exec", {
             paymentDate: new Date().toISOString(),
             amount: basePrice,             // базовая цена до скидки (например, 790)
             discount: calculatedDiscount,  // вычисленная скидка (например, если скидка 40%, discount = 316)
