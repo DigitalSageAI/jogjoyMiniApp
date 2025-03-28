@@ -18,21 +18,45 @@ function Payment() {
   const [promoPrice, setPromoPrice] = useState(790);
   const [used, setUsed] = useState(false);
 
+  // Определяем базовую цену и процент скидки
+  const basePrice = 790;
+  const discountPercent = 40; // например, 40%
+  const calculatedDiscount = (basePrice * discountPercent) / 100; // 316
+
   useEffect(() => {
     const selectedTarif = localStorage.getItem("selectedTarif");
-    if (selectedTarif && selectedTarif == "clubMembership") {
+    if (selectedTarif && selectedTarif === "clubMembership") {
       setSelected("clubMembership");
       setTarif("3 year");
-
       localStorage.removeItem("selectedTarif");
     }
-    const success = searchParams.get("Success") == "true";
+    const success = searchParams.get("Success") === "true";
     const errorCode = searchParams.get("ErrorCode");
     console.log(success);
 
     if (success) {
       const type = localStorage.getItem("type"); // Достаем сохраненный тариф
 
+      // Скрипт для Russia Running: отправляем данные в Google Таблицу,
+      // если промокод начинается на "4Rr0"
+      if (promo && promo.startsWith("4Rr0")) {
+        axios
+          .post("https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec", {
+            paymentDate: new Date().toISOString(),
+            amount: basePrice,             // базовая цена до скидки (например, 790)
+            discount: calculatedDiscount,  // вычисленная скидка (например, если скидка 40%, discount = 316)
+            promoCode: promo,
+            partnerId: "8b43d763-7659-4ad0-a4b2-c1afc73018e2",
+            starsAmount: ""                // при необходимости можно передать и другую информацию
+          })
+          .then((response) => {
+            console.log("Данные отправлены в Google Таблицу:", response.data);
+          })
+          .catch((error) => {
+            console.error("Ошибка при отправке данных:", error);
+          });
+      }
+      
       if (type && id) {
         axios
           .post("/subscribe", {
