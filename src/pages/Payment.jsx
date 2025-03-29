@@ -47,7 +47,7 @@ useEffect(() => {
   console.log("Промокод:", storedPromo);
 
   axios
-    .post("https://script.google.com/macros/s/AKfycbwexnHs82bA_y197olkMsNIr6mLUBpGs__k2VTPhzc5oJl90otWX4UqI3koY98q52dl/exec", {
+    .post("https://api.jogjoy.run/send-to-google-sheet", {
       paymentDate: new Date().toISOString(),
       amount: basePrice,
       discount: discountAmount,
