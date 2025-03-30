@@ -68,7 +68,7 @@ function Payment() {
                 const discount = fullPrice - savedPrice;
           
                 console.log("✅ Отправка в лог: paid =", savedPrice, "discount =", discount);
-          
+                console.log("📤 Отправка на бэк с origin:", window.location.origin);
                 axios
                   .post("https://api.jogjoy.run/log-promo", {
                     paid: savedPrice,
