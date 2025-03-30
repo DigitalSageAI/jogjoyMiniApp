@@ -44,14 +44,30 @@ function Payment() {
             const savedPromo = localStorage.getItem("promo");
             const savedPrice = Number(localStorage.getItem("promoPrice"));
           
+            console.log("📦 Логирование промокода...");
+            console.log("🎫 savedPromo:", savedPromo);
+            console.log("💰 savedPrice:", savedPrice);
+            console.log("📦 tarif:", tarif);
+          
             if (savedPromo && savedPromo.startsWith("4Rr0")) {
               let fullPrice = 0;
           
-              if (tarif === "1 year") fullPrice = 790;
-              else if (tarif === "1 month") fullPrice = 490;
+              switch (tarif) {
+                case "1 year":
+                  fullPrice = 790;
+                  break;
+                case "1 month":
+                  fullPrice = 490;
+                  break;
+                default:
+                  console.warn("⛔ Неподдерживаемый тариф для логирования промокода:", tarif);
+                  break;
+              }
           
               if (!isNaN(savedPrice) && fullPrice > 0) {
                 const discount = fullPrice - savedPrice;
+          
+                console.log("✅ Отправка в лог: paid =", savedPrice, "discount =", discount);
           
                 axios
                   .post("https://api.jogjoy.run/log-promo", {
@@ -60,14 +76,16 @@ function Payment() {
                     discount: discount,
                   })
                   .then(() => {
-                    console.log("✅ Промокод успешно логирован");
+                    console.log("🎉 Промокод успешно логирован в Google Таблицу");
                   })
                   .catch((err) => {
-                    console.error("❌ Ошибка при логировании промокода:", err);
+                    console.error("❌ Ошибка при логировании промокода:", err.message, err.response?.data);
                   });
               } else {
-                console.warn("⚠️ Не удалось рассчитать полную стоимость или сохранённая цена невалидна");
+                console.warn("⚠️ Невалидные данные для логирования: fullPrice или savedPrice некорректны");
               }
+            } else {
+              console.log("ℹ️ Промокод отсутствует или не начинается с '4Rr0', логирование не требуется");
             }
           
             localStorage.removeItem("type");
