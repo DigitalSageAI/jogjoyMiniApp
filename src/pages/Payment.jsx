@@ -77,21 +77,27 @@ function Payment() {
                   })
                   .then(() => {
                     console.log("🎉 Промокод успешно логирован в Google Таблицу");
+                    finishPayment();
                   })
                   .catch((err) => {
                     console.error("❌ Ошибка при логировании промокода:", err.message, err.response?.data);
+                    finishPayment();
                   });
               } else {
                 console.warn("⚠️ Невалидные данные для логирования: fullPrice или savedPrice некорректны");
+                finishPayment();
               }
             } else {
               console.log("ℹ️ Промокод отсутствует или не начинается с '4Rr0', логирование не требуется");
+              finishPayment();
             }
-          
-            localStorage.removeItem("type");
-            localStorage.removeItem("promo");
-            localStorage.removeItem("promoPrice");
-            window.history.go(-3);
+            
+            function finishPayment() {
+              localStorage.removeItem("type");
+              localStorage.removeItem("promo");
+              localStorage.removeItem("promoPrice");
+              window.history.go(-3);
+            }
           })
           .catch(() => alert("Не удалось произвести оплату"));
       }
