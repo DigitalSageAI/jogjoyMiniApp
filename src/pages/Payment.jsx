@@ -41,9 +41,38 @@ function Payment() {
             val: true,
           })
           .then(() => {
-            // alert("Успешно прошла оплата");
-            localStorage.removeItem("type"); // Удаляем type после оформления
-
+            const savedPromo = localStorage.getItem("promo");
+            const savedPrice = Number(localStorage.getItem("promoPrice"));
+          
+            if (savedPromo && savedPromo.startsWith("4Rr0")) {
+              let fullPrice = 0;
+          
+              if (tarif === "1 year") fullPrice = 790;
+              else if (tarif === "1 month") fullPrice = 490;
+          
+              if (!isNaN(savedPrice) && fullPrice > 0) {
+                const discount = fullPrice - savedPrice;
+          
+                axios
+                  .post("https://api.jogjoy.run/log-promo", {
+                    paid: savedPrice,
+                    code: savedPromo,
+                    discount: discount,
+                  })
+                  .then(() => {
+                    console.log("✅ Промокод успешно логирован");
+                  })
+                  .catch((err) => {
+                    console.error("❌ Ошибка при логировании промокода:", err);
+                  });
+              } else {
+                console.warn("⚠️ Не удалось рассчитать полную стоимость или сохранённая цена невалидна");
+              }
+            }
+          
+            localStorage.removeItem("type");
+            localStorage.removeItem("promo");
+            localStorage.removeItem("promoPrice");
             window.history.go(-3);
           })
           .catch(() => alert("Не удалось произвести оплату"));
