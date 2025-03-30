@@ -120,16 +120,20 @@ function Payment() {
     if (!promo) return;
     try {
       const existingPromo = promos.find((p) => p.name === promo);
-      if (existingPromo && used == false) {
+      if (existingPromo && used === false) {
         setUsed(true);
-        setPromoPrice((prev) => prev - (prev * existingPromo.percent) / 100);
-        alert(
-          `Промокод найден: ${existingPromo.name} - ${existingPromo.percent}% скидка`
-        );
-      } else if (used == true) {
-        alert("Вы уже использовали промокод");
+        const newPrice = promoPrice - (promoPrice * existingPromo.percent) / 100;
+        setPromoPrice(newPrice);
+  
+        // 🟢 Сохраняем промокод и цену в localStorage
+        localStorage.setItem("promo", promo);
+        localStorage.setItem("promoPrice", newPrice);
+  
+        console.log("✅ Промокод сохранён в localStorage:", promo, newPrice);
+      } else if (used === true) {
+        console.log("ℹ️ Промокод уже использован");
       } else {
-        alert("Промокод не найден");
+        console.log("❌ Промокод не найден");
       }
     } catch (error) {
       console.error("Ошибка при проверке промокода", error);
